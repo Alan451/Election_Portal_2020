@@ -30,6 +30,8 @@ function camvas(ctx, callback) {
     // Yay, now our webcam input is treated as a normal video and
     // we can start having fun
     self.video.srcObject = stream
+    
+    document.getElementById('canvas-status').classList.add("hidden");
     // Let's start drawing the canvas!
     self.update()
   }, function(err) {
