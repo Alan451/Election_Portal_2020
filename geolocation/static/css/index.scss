@@ -1,45 +1,31 @@
-@font-face {
-    font-family: 'Atkinson Hyperlegible';
-    src: url('../fonts/regular.ttf') format('truetype');
-}
+$secondary-color: #FEBD09;
 
-@font-face {
-    font-family: 'Atkinson Hyperlegible Bold';
-    src: url('../fonts/bold.ttf') format('truetype');
-}
-
-.font-ah {
-    font-family: Atkinson Hyperlegible;
-}
-
-.font-bold {
-    font-family: Atkinson Hyperlegible Bold;
-}
+@import "materialize-css/sass/components/variables";
 
 .partition {
     position: absolute;
-    left: 45.06%;
+    left: 54.06%;
     top: 0%;
     bottom: 0%;
-    width: 8px;
+    width: 19.9px;
     height: 100%;
 
     background-color: #2E2F2F;
 }
 
 .logo-vote {
-    /* position: relative;
+    position: relative;
     top: 35.99px;
     left: 135.04px;
-    height: 40px; */
+    height: 40px;
     /* width: 41.81px; */
 }
 
 .logo-iitg {
-    /* position: relative;
+    position: relative;
     top: 208.15px;
     left: 30px;
-    height: 70px; */
+    height: 70px;
 }
 
 .election-titile {
@@ -50,20 +36,33 @@
 
     font-family: Atkinson Hyperlegible;
     font-weight: bold;
+    font-size: 96px;
+    line-height: 101px;
 }
 
 .rules-heading {
-    font-family: Atkinson Hyperlegible Bold;
-    /* font-weight: bold; */
+    font-family: Atkinson Hyperlegible;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 38px;
+    text-align: left;
 
     color: #2E2F2F;
 }
 
+div.right-col.col.s6 {
+    padding-top: 8%;
+    width: 45%;
+    float: right;
+    padding-right: 5%;
+    padding-left: 5%;
 
-.text-gray-600{
     font-family: Atkinson Hyperlegible;
-    color: #4C4D4D;
-  }
+    font-size: 18px;
+    line-height: 19px;
+
+    color: #2E2F2F;
+}
 
 p {
     text-align: justify;
@@ -120,21 +119,6 @@ div.conclusion {
 .toast {
     position: relative;
     right: 25%;
-}
-
-[type="checkbox"]:checked+span:not(.lever):before {
-    border-right: 2px solid #2b00ff;
-    border-bottom: 2px solid #2b00ff;
-}
-
-button:focus {
-    outline: none;
-    background-color: #2b00ff !important;
-    color: white;
-}
-
-button:hover {
-    background-color: #2b00ff !important;
 }
 
   /* .privacy-policy {

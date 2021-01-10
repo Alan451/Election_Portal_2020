@@ -17,13 +17,15 @@
       <button id="nota" type="button" onclick="voteClick('{{contestantList.0.post}}')" class="lg:float-right relative bottom-4 mr-5 bg-custom text-custom h-14 w-48 text-lg text-center font-bold rounded-sm next-btn">NOTA</button>
     </div>
     <input type="hidden" name="choice" id="res">
+    <div class="p-4 w-full text-lg text-right info-block text-gray-600 hidden" style="background-color: #f9f9f969;">
+      <div class="w-1/2 float-right">
+        You have opted for <span class="opted-for font-bold"></span>.
+        <!-- <br> -->
+        Click on Next to confirm your choice. You may review and modify your choices at the end.
+      </div>
+    </div>
   </form>
 
-  <div class="w-full text-2xl info-block hidden bg-gray-50">
-    You have opted for <span class="opted-for"></span>.
-    <br>
-    Click on Next to confirm your choice. You may review and modify your choices at the end.
-  </div>
 {% endblock save_and_next %} 
 
 {% block content %}
