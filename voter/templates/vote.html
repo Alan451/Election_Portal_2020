@@ -10,24 +10,70 @@
 {% endblock designation_info %}
 
 {% block save_and_next %}
-  <form method="post"><!-- onsubmit="call_post_req()" -->
-    {% csrf_token %}
-    <div class="inline mt-10 pr-7 2xl:pr-80 sm:pr-auto pl-7 sm:pl-7 space-y-4 voter-list-btn">
-      <button id="next-btn" type="submit" class="relative mr-10 sm:mr-auto float-right bg-black text-white h-14 w-48 text-lg text-center font-bold rounded-sm next-btn">Next</button>
-      <button id="nota" type="button" onclick="voteClick('{{contestantList.0.post}}')" class="lg:float-right relative bottom-4 mr-5 bg-custom text-custom h-14 w-48 text-lg text-center font-bold rounded-sm next-btn">NOTA</button>
-    </div>
-    <input type="hidden" name="choice" id="res">
-  </form>
-
-  <div class="w-full text-2xl info-block hidden bg-gray-50">
-    You have opted for <span class="opted-for"></span>.
-    <br>
-    Click on Next to confirm your choice. You may review and modify your choices at the end.
+<div class="sm:flex sm:flex-wrap w-full">
+      <div class=" w-full sm:w-7/12 md:w-5/12">
+        <div class="flex bg-gray-100 w-full rounded-lg p-5 h-full items-center">
+          <svg width="24" height="24" class = "w-6 h-6 flex-shrink-0 mr-4 =" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M13.317 0.588662C12.9169 0.356596 12.4625 0.234375 12 0.234375C11.5375 0.234375 11.0831 0.356596 10.683 0.588662L2.808 5.15616C2.41013 5.38693 2.07987 5.71818 1.85031 6.11675C1.62075 6.51532 1.49995 6.96721 1.5 7.42716V16.5742C1.5 17.5102 1.998 18.3742 2.808 18.8452L10.683 23.4127C11.0831 23.6447 11.5375 23.7669 12 23.7669C12.4625 23.7669 12.9169 23.6447 13.317 23.4127L21.192 18.8452C22.002 18.3757 22.5 17.5102 22.5 16.5742V7.42716C22.5 6.49116 22.002 5.62716 21.192 5.15616L13.317 0.588662ZM11.8125 2.53566C11.8695 2.50275 11.9342 2.48542 12 2.48542C12.0658 2.48542 12.1305 2.50275 12.1875 2.53566L19.1325 6.56316L12 10.7002L4.8675 6.56316L11.8125 2.53566ZM3.75 8.51616V16.5742C3.75 16.7092 3.8205 16.8307 3.9375 16.8982L10.875 20.9227V12.6487L3.75 8.51616ZM13.125 20.9227L20.0625 16.8982C20.1194 16.8653 20.1667 16.8181 20.1996 16.7612C20.2325 16.7044 20.2499 16.6399 20.25 16.5742V8.51616L13.125 12.6487V20.9227Z" fill="#2B00FF"/>
+            </svg>
+          <span>
+            <span class="font-ah  text-base">
+              <span class="opted-for font-bold text-gray-800 ">
+              Select the candidiate you want to vote for.
+            </span>
+            <br>
+            <span class = " opacity-80">Tip: You can also use Keyboard Keys respective to the candidiate to Vote.</span>
+          </span>
+          </span>
+        </div>
+      </div>
+      <div class="sm:float-right h-full w-full sm:w-5/12 md:w-7/12 py-2">
+        <form method="post" class= "space-y-5 sm:space-x-5"><!-- onsubmit="call_post_req()" -->
+          {% csrf_token %}
+            
+            <button id="next-btn" type="submit" class="opacity-10 cursor-not-allowed sm:mr-auto float-right bg-black waves-effect waves-light text-white h-16 sm:h-14 w-full sm:w-48 text-xl sm:text-lg text-center font-bold rounded-sm next-btn px-5 green_ki_ma_ki_black" disabled>Save</button>
+            <button id="nota" type="button" onclick="voteClick('{{contestantList.0.post}}')" class="float-right waves-effect waves-light  bg-custom text-custom h-16 sm:h-14 w-full sm:w-48 text-xl sm:text-lg text-center font-bold rounded-sm next-btn px-5">NOTA</button>
+          
+          <input type="hidden" name="choice" id="res">
+        </form>
+      </div> 
   </div>
+  <div class="w-full h-32 block sm:hidden">
+
+  </div>
+
 {% endblock save_and_next %} 
 
 {% block content %}
 {{ pks|json_script:"pks-data" }}
+<script>
+  const observer = lozad(); // lazy loads elements with default selector as '.lozad'
+  observer.observe();
+</script>
+<style>
+  .lds-dual-ring {
+  display: inline-block;
+  }
+  .lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: 5px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  border-color: #fff transparent  #fff transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+  }
+  @keyframes lds-dual-ring {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+  }
+</style>
   <ul class="nota-effect space-y-4 sm:space-y-0 sm:flex sm:space-x-4">
       {% for i in contestantList %}
         <li id="{{i.pk}}"
@@ -42,20 +88,23 @@
           </span>
           <span class="py-6">
             <span><img
-                class="rounded-sm"
+                class="rounded-sm lozad"
                 width="130"
-                src="{% static i.pic %}" />
+                src="{% static i.pic %}"
+                data-src="{% static i.pic %}" />
             </span>
           </span>
           <span class="py-6"
             ><p class="text-xl name_{{i.pk}} font-bold text-gray-800">{{i.name}}</p>
             <ul
-              class="font-medium max-w-md space-y-1 text-1xl pt-2 text-gray-600"
+              class="font-medium max-w-md space-y-1 text-1xl pt-2 text-gray-600 pr-2"
             >
-              <li>{{i.agenda1}}</li>
-              <li>{{i.agenda2}}</li>
-              <li>{{i.agenda3}}</li>
-              <li>{{i.agenda4}}</li>
+              <li>1. {{i.agenda1}} </li>
+              <li>2. {{i.agenda2}} </li>
+              <li>3. {{i.agenda3}} </li>
+              <li>4. {{i.agenda4}} </li>
+              
+              <!-- <li>On time maintainance of hostels by creating seperate maintainance cells. Introducing the Best TA Awards and 24x7 access to the Internet. </li> -->
             </ul>
           </span>
         </li>
@@ -77,14 +126,15 @@
     // }
   
 
-    // function post_req(data) {
+    // function post_req(current,selected) {
     //     var allCookies = document.cookie;
     //     var csrf = allCookies.substring(10);
     //     var postdata = {
-    //         choice: data,
+    //         selected: selected,
+          //   current: current, 
     //         'csrfmiddlewaretoken': csrf
     //     };
-    //     $.post('/voter/vote/', postdata);
+    //     $.post('ham/', postdata);
     // }
   </script>
 {% endblock content %}
@@ -95,6 +145,13 @@
       var ids = JSON.parse(document.getElementById('pks-data').textContent);
       getIds(ids);
       setProgress('{{post}}', {{request.session.total_no}});
+      
+      // console.log("reset");
+      // $("#next-btn").html = "Save";
+      $("#next-btn").click(async function (e) {
+        // console.log("set");
+        document.getElementById('next-btn').innerHTML = '<div class="mt-1 lds-dual-ring"></div>';
+      });
     });
   </script>
   

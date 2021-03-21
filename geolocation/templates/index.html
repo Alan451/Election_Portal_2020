@@ -3,49 +3,58 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.7.1.min.js"></script>
 
     <title>Gymkhana Elections 2021</title>
 </head>
 <body>
-    <div class="partition"></div>
+    <div class="partition h-full hidden xl:block"></div>
     
-    <div class="row">
-        <div class="col s6">
-            <a href="#"><img class="logo-vote" src="{% static 'icons/vote_2.png' %}"></a>
-            <a href="https://www.iitg.ac.in/"><img class="logo-iitg" src="{% static 'icons/iitg.png' %}" alt=""></a>
-            <h1 class="election-titile">Gymkhana Elections 2021</h1>
+    <div class="flex flex-wrap px-0 sm:px-0 container mt-0 sm:mt-10 xl:mt-10 2xl:mt-16">
+        <div class="sm:w-1/2">
+            <!-- <a href="#"><img class="sm:p-10 sm:h-auto" src="{% static 'icons/Logo_Vote.svg' %}"></a> -->
+            <img class="pl-10 mt-16 mb-6 sm:mb-0 sm:p-10 h-16 sm:h-auto" src="{% static 'icons/Logos.svg' %}" alt="Elections logo">
+            <p class="w-1/2 text-6xl sm:text-6xl md:text-7xl lg:text-8xl font-bold pl-12">Gymkhana Elections 2021</p>
         </div>
-        <div class="center right-col col s6">
-            <h3 class="rules-heading">Terms and Conditions</h3>
-            <p>1. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mattis ipsum at convallis integer nibh arcu praesent tellus. Dictum lacus quisque habitant convallis non scelerisque tortor a.</p>
-            <p>2. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mattis ipsum at convallis integer nibh arcu praesent tellus. Dictum lacus quisque habitant convallis non scelerisque tortor a.</p>
-            <p>3. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mattis ipsum at convallis integer nibh arcu praesent tellus. Dictum lacus quisque habitant convallis non scelerisque tortor a.</p>
-            <p>4. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mattis ipsum at convallis integer nibh arcu praesent tellus. Dictum lacus quisque habitant convallis non scelerisque tortor a.</p>
-            <p>5. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mattis ipsum at convallis integer nibh arcu praesent tellus. Dictum lacus quisque habitant convallis non scelerisque tortor a.</p>
-            <p>6. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mattis ipsum at convallis integer nibh arcu praesent tellus. Dictum lacus quisque habitant convallis non scelerisque tortor a.</p>
+        <div class="px-12 sm:pr-0 sm:pl-4 lg:px-6 xl:px-12 sm:w-1/2 space-y-2 text-gray-600 mt-0 sm:mt-20">
+            <h3 class="rules-heading pt-10 pb-2 text-2xl">Instructions for Voting</h3>
+            <p>1. Welcome to Online Election Portal 2021; This is an Interactive voting platform developed by <b>SWC IIT Guwahati</b>.</p>
+            <p>2. Make sure you are using <b>Incognito Mode</b> in your browser. It is recommended to use Chromium-based browsers (Google Chrome, Firefox, Microsoft Edge), for Voting.</p>
+            <p>3. Once you login, We will ask you to capture your image. Make sure your face is visible, Voters using malpraticies to defer camera functionality will face strict disciplinary action including cancellation of voting rights.</p>
+            <p>4. You can also recapture your image if you feel so and the latest version will be uploaded.</p>
+            <p>5. The Posts will be displayed one by one, You can select the candidiate or click NOTA ( None of the above ) and you are required to save your choices before proceeding to the next section.</p>
+            <p>6. There are two types of voting:
+                    <li><b>Single Choice Voting: <br></b> Vice President (1) and General Secretaries (7)</li>
+                    <li><b>Multiple Choice Voting: <br></b> Undergraduate Senate (1)/ Postgraduate Senate (1) (You can vote for <b>At Max 7</b>) and Girls Senate (1) (Only Girls can vote for <b>At Max 3</b>)</li>
+            </p>
+            <p>7. You can use the <b>Hamburger Menu</b> for navigating between different posts.</p>
+            <p>8. After Voting you will be redirected to <b>the Review page</b>. There you can edit your choices and review them once. Then <b>CLick Submit to finally Submit your votes.</b> You won't be able to change your votes after submiting.</p>
             <div class="tandc">
                 <label>
-                    <input required type="checkbox" name="accept_t_and_c" id="accept_t_and_c">
-                    <span>I agree with the above terms and conditions</span>
+                    <input class="checkbox" required type="checkbox" name="accept_t_and_c" id="accept_t_and_c">
+                    <span class="text-black text-lg mt-6 text-gray-600">I have read above usage terms.</span>
                 </label>
             </div>
             <div class="conclusion">
                 <!-- <a class="privacy-policy" href="#">Read Privacy Policy</a> -->
-                <button class="center buton" style="cursor: pointer;" type="button"><a href="{% url 'django_auth_adfs:login' %}"></a><span id="button_text">Login with outlook</span></a></button>
+                <button id="next-btn" type="button" class="transition mt-6 mb-20 login_button relative mx-auto font-bold text-black bg-white border-2 border-black py-4 px-12 focus:outline-none hover:bg-blue-600 hover:text-white rounded text-lg z-60"><a href="{% url 'django_auth_adfs:login' %}"><span>Login with outlook</span></a></button>
+                <!-- <button id="next-btn" type="button" class="relative mr-10 sm:mr-auto place-self-center bg-black text-white h-14 w-60 py-5 text-lg text-center rounded-sm next-btn"><a href="{% url 'django_auth_adfs:login' %}"><span id="button_text">Login with outlook</span></a></button> -->
+                <!-- <button class="center buton" style="cursor: pointer;" type="button"></button> -->
             </div>
         </div>
     </div>
 
     <script>
-        $(".buton").click(function (e) { 
+        $("#next-btn").click(function (e) { 
             e.preventDefault();
             if ($("#accept_t_and_c").prop('checked') == true) {
                 window.location.href = "{% url 'django_auth_adfs:login' %}";

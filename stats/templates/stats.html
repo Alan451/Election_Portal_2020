@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Election Statistics</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.js"></script>
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/stats.css' %}" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #FFF3F0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+      .ripple {
+        /* margin: auto; */
+        /* margin-top: 10rem; */
+        background-color: #F71873;
+        /* width: 1rem; */
+        /* height: 1rem; */
+        border-radius: 50%;
+        animation: ripple 2s linear infinite;
+      }
+      .ripple_anime {
+        /* margin: auto; */
+        /* margin-top: 10rem; */
+        background-color: #F71873;
+        /* width: 1rem; */
+        /* height: 1rem; */
+        border-radius: 50%;
+        animation: ripple_anime 2s linear infinite;
+      }
+      @keyframes ripple_anime {
+       0% {box-shadow: 0 0 0px 0px rgba(240, 25, 222, 0.5);}
+       100% {box-shadow: 0 0 0px 15px rgba(216, 91, 199, 0.349);}
+}
+      /* @keyframes ripple {
+        0% {
+          box-shadow: 0 0 0 0rem rgba(#2b00ff85, 0.2),
+            0 0 0 0.01px rgba(43, 0, 255, 0.2), 0 0 0 2rem rgba(43, 0, 255, 0.2),
+            0 0 0 0.022px rgba(43, 0, 255, 0.2);
+        }
+        100% {
+          box-shadow: 0 0 0 0.01px rgba(43, 0, 255, 0.2),
+            0 0 0 0.02px rgba(43, 0, 255, 0.2), 0 0 0 5rem rgba(43, 0, 255, 0.2),
+            0 0 0 0.033px rgba(43, 0, 255, 0);
+        }
+      } */
+    </style>
+  </head>
+  <body>
+    <style>
+      .font_ah{
+        font-family: Atkinson Hyperlegible;
+         font-style: normal;
+        font-weight: bold;
+      }
+      .border-pink{
+        border: 5px solid #F71873;
+        box-sizing: border-box;
+        border-radius: 12px;
+      }
+      .border-pink{
+        background: linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)), #2E2F2F;
+        border: 3px solid #F71873;
+        box-sizing: border-box;
+        border-radius: 10px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+    
+    <div class="flex z-10 flex-wrap">
+      <div class="content_div z-10 block px-12 sm:pr-0 w-full lg:h-screen h-full lg:w-1/2 bg-black space-y-8 mt-0 pt-16 lg:overflow-scroll">
+        <!-- <div class="z-10 block px-12 sm:pr-0 h-screen lg:w-1/2 bg-black sm:pl-4 lg:px-6 xl:px-12 space-y-8 mt-0 pt-16"> -->
+          <h3 class="text-3xl sm:text-6xl place-self-center w-full text-center text-white font-bold">Gymkhana <br> Elections 2021</h3>
+          <!-- <h3 class="text-7xl place-self-center w-full text-center text-white font-bold"></h3> -->
+          <div class="flex text-white font-ah justify-center space-x-10">
+            <div id="count" class="cursor-pointer underline">Vote Count</div>
+            <div id="hostel" class="cursor-pointer">Hostel Wise</div>
+            <div id="branch" class="cursor-pointer">Branch Wise</div>
+          </div>
+          <div class="hidden branch z-50 bg-black">
+            <canvas id="myChart" width="40" height="40"></canvas>
+          </div>
+          <div class="hidden hostel z-50 bg-black">
+            <canvas id="myChart1" width="40" height="40"></canvas>
+          </div>
+          <div class="space-y-3">
+          <div class="count border-pink w-5/6 z-10 font-bold sm:py-4 py-2 mx-auto">
+            <div class="text-white text-lg sm:text-2xl z-10 font-bold text-center">Total Votes Count</div>
+            <div class="flex z-10 justify-center space-x-1 sm:space-x-2 py-5">
+              <div id="vote-1" class="bg-white text-black sm:p-6 p-3 sm:text-3xl text-lg rounded-md"></div>
+              <div id="vote-2" class="bg-white text-black sm:p-6 p-3 sm:text-3xl text-lg rounded-md"></div>
+              <div id="vote-3" class="bg-white text-black sm:p-6 p-3 sm:text-3xl text-lg rounded-md"></div>
+              <div id="vote-4" class="bg-white text-black sm:p-6 p-3 sm:text-3xl text-lg rounded-md"></div>
+            </div>
+          </div>
+          <div class="count z-10  w-5/6 z-10 py-2 flex mx-auto space-x-2">
+            <div class=" w-1/2 border-pink p-2">
+            <div class="text-gray-300  opacity-30 text-sm z-10 font-ah text-center">Leading Hostel</div>
+             <div id="jagruk-hostel" class="text-white text-lg sm:text-2xl z-10  font-bold text-center"></div>
+            </div>
+            <div class=" w-1/2  border-pink p-2">
+            <div class="text-white text-gray-300 opacity-30 text-sm z-10 font-ah text-center">Leading Department</div>
+              <div id="jagruk-dept" class="text-white text-lg sm:text-2xl z-10 font-bold text-center"></div>
+            </div>
+          </div>
+          <!-- <div class="mb-10"> -->
+            <div class="count z-10 border-pink w-5/6 z-10 font-bold py-4 mx-auto">
+              <div class="text-white text-lg sm:text-2xl z-10 font-bold text-center">Voting Percentage</div>
+              <div class="flex z-10 justify-center space-x-2 py-5">
+                <div id="percent-1" class="bg-white text-black sm:p-6 p-3 sm:text-3xl text-lg rounded-md"></div>
+                <div id="percent-2" class="bg-white text-black sm:p-6 p-3 sm:text-3xl text-lg rounded-md"></div>
+                <div class="bg-white text-black sm:p-6 p-3 sm:text-3xl text-lg rounded-md">%</div>
+              </div>
+            </div>
+            <div class="h-10 lg:hidden">
+
+            </div>
+          <!-- </div> -->
+
+        </div>
+      </div>
+      <div class="map_div z-50 lg:w-1/2 w-full h-screen h-screen-60 relative">
+        <div z-50 id="map"></div>
+      </div>
+    </div>
+
+    <div class="overlay hidden">
+      <button id="replay">Replay</button>
+    </div>
+
+    <script>
+      // TO MAKE THE MAP APPEAR YOU MUST
+      // ADD YOUR ACCESS TOKEN FROM
+      // https://account.mapbox.com
+      mapboxgl.accessToken =
+        "pk.eyJ1Ijoic2h1YmhhbWdhbmRoaTY1IiwiYSI6ImNranN3bnpxNTQzdTIycmxvZ3g2MjB5bzcifQ.r157xCeh45aMVGSIum6iHw";
+      var map;
+
+      if ($(window).width() < 1024) {
+        map = new mapboxgl.Map({
+          container: "map",
+          style: "mapbox://styles/shubhamgandhi65/ckjsx5kgw73wx19oa741og6yy",
+          center: [ 78.9629, 20.5937],
+          zoom: 3,
+        });
+      } else {
+        map = new mapboxgl.Map({
+          container: "map",
+          style: "mapbox://styles/shubhamgandhi65/ckjsx5kgw73wx19oa741og6yy",
+          center: [ 78.9629, 20.5937],
+          zoom: 4,
+        });
+        $(".map_div").insertBefore($(".content_div"));
+      }
+
+      // San Francisco
+      var destination = [8.1414, 25.61];
+
+      // Washington DC
+      var origin = [91.6916, 26.1878];
+
+      // A simple line from origin to destination.
+      var route = {
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            geometry: {
+              type: "LineString",
+              coordinates: [origin, destination],
+            },
+          },
+        ],
+      };
+
+      // A single point that animates along the route.
+      // Coordinates are initially set to origin.
+      var point = {
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            properties: {},
+            geometry: {
+              type: "Point",
+              coordinates: origin,
+            },
+          },
+        ],
+      };
+      var origin_coords = [
+      ];
+      var geojson = {
+        type: "FeatureCollection",
+        features: [],
+      };
+      
+      function changeCoords() { 
+            origin_coords.forEach((coords) => {
+              var temp = {
+                type: "Feature",
+                properties: {
+                  message: "Bar",
+                  iconSize: [100, 100],
+                },
+                geometry: {
+                  type: "Point",
+                  coordinates: coords,
+                },
+              };
+              geojson.features.push(temp);
+            });
+          
+          geojson.features.forEach((marker,i,arr) => {
+            // create a DOM element for the marker
+            var el = document.createElement("div");
+            // if(i==0){
+            //   el.className = "marker ripple ripple_anime z-0 ";
+            //   el.style.width = "12px";
+            //   el.style.height = "12px";
+            // }
+            // else{
+            var pointSize; 
+            var counter = 0;
+            for(var q=0;q<arr.length;q+=150){
+              pointSize = (10-counter).toString()+"px";
+              if (10-counter == 4){
+                break;   
+              }
+              counter++;
+            }
+            console.log(pointSize);
+            el.className = "marker ripple z-0";
+            el.style.width = pointSize;
+            el.style.height = pointSize;
+            // }
+           
+
+            new mapboxgl.Marker(el)
+              .setLngLat(marker.geometry.coordinates)
+              .addTo(map);
+          });
+    }
+   
+     
+      var counter = 0;
+      function loadMap() {
+      
+        map.loadImage(
+          "https://i.ibb.co/DLDBhF8/Origin.png",  
+          function (error, image) {
+            if (error) throw error;
+            map.addImage("cat", image);
+          }
+        );
+        map.addLayer({
+          id: "Dot_img",
+          type: "symbol",
+          source: "Dot",
+          layout: {
+            "icon-image": "cat",
+            "icon-size": 1,
+          },
+        });
+        map.addSource("route", {
+          type: "geojson",
+          data: route,
+        });
+
+        map.addSource("point", {
+          type: "geojson",
+          data: point,
+        });
+
+  
+
+        map.addLayer({
+          id: "point",
+          source: "point",
+          type: "symbol",
+          layout: {
+            "icon-image": "cat",
+            "icon-size": 0.06,
+          },
+        });
+      };
+      map.on("load", loadMap);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+      function ajaxCall(){
+        $.ajax({
+          cache: false,
+          url: "{% url 'data' %}",
+          dataType: 'json',
+          method: 'GET',
+        }).done(function(data) {
+          setDeptCount(data)
+        }).fail(
+          function(err){
+            console.log(err); 
+          }
+        ).always(
+          function(){
+            setTimeout(function(){ajaxCall();}, 90000);
+          }
+        );
+      };
+      $(document).ready(function () {
+        ajaxCall();
+
+        $("#branch").click(function (e) {
+          e.preventDefault();
+          $("#branch").addClass("underline");
+          $("#hostel").removeClass("underline");
+          $("#count").removeClass("underline");
+          $('.count').each(function(i, obj) {
+              $(this).addClass("hidden");
+          });
+          $('.hostel').each(function(i, obj) {
+            $(this).addClass("hidden");
+          });
+          $('.branch').each(function(i, obj) {
+            $(this).removeClass("hidden");
+          });
+        });
+
+        $("#hostel").click(function (e) {
+          e.preventDefault();
+          $("#hostel").addClass("underline");
+          $("#branch").removeClass("underline");
+          $("#count").removeClass("underline");
+          $('.count').each(function(i, obj) {
+              $(this).addClass("hidden");
+          });
+          $('.branch').each(function(i, obj) {
+            $(this).addClass("hidden");
+          });
+          $('.hostel').each(function(i, obj) {
+            $(this).removeClass("hidden");
+          });
+        });
+
+        $("#count").click(function (e) { 
+          e.preventDefault();
+          $("#branch").removeClass("underline");
+          $("#hostel").removeClass("underline");
+          $("#count").addClass("underline");
+          $('.branch').each(function(i, obj) {
+              $(this).addClass("hidden");
+          });
+          $('.hostel').each(function(i, obj) {
+              $(this).addClass("hidden");
+          });
+          $('.count').each(function(i, obj) {
+            $(this).removeClass("hidden");
+          });
+        });
+      });
+      
+      let vote_percent = [];
+      let graph_labels = [];
+      let vote_percent_hostel = [];
+      let graph_labels_hostel = [];
+      function setDeptCount(dicti) {
+        origin_coords = dicti["coords"];
+        // console.log(origin_coords);
+        changeCoords();
+        // loadMap();
+        // map.on("load",loadMap());
+        document.getElementById("vote-1").innerHTML = dicti["totalVoted"][0];
+        document.getElementById("vote-2").innerHTML = dicti["totalVoted"][1];
+        document.getElementById("vote-3").innerHTML = dicti["totalVoted"][2];
+        document.getElementById("vote-4").innerHTML = dicti["totalVoted"][3];
+        document.getElementById("percent-1").innerHTML = dicti["votePercent"][0];
+        document.getElementById("percent-2").innerHTML = dicti["votePercent"][1];
+        document.getElementById("jagruk-dept").innerHTML = dicti["jagrukDept"];
+        document.getElementById("jagruk-hostel").innerHTML = dicti["jagrukHostel"];
+        vote_percent = [];
+        graph_labels = [];
+        vote_percent_hostel = [];
+        graph_labels_hostel = [];
+        // tots = [];
+        for (var key in dicti["deptCount"]) {
+            // check if the property/key is defined in the object itself, not in parent
+            if (dicti["deptCount"].hasOwnProperty(key)) {           
+                // console.log(key, dicti["deptCount"][key]);
+                vote_percent.push(dicti["deptCount"][key]["percent"]);
+                graph_labels.push(key);
+                // tots.push(dicti["deptCount"][key]["total"]);
+            }
+        }
+        for (var key in dicti["hostelCount"]) {
+            if (dicti["hostelCount"].hasOwnProperty(key)) {           
+                // console.log(key, dicti["deptCount"][key]);
+                vote_percent_hostel.push(dicti["hostelCount"][key]["count"]);
+                if(key == "MARRIED SCHOLARS HOSTEL"){
+                  graph_labels_hostel.push("MSH");
+                } else {
+                  graph_labels_hostel.push(key);
+                }
+                // tots.push(dicti["deptCount"][key]["total"]);
+            }
+        }
+        // console.log(tots);
+        // console.log(graph_labels);
+        // console.log(vote_percent);
+      
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(ctx, {
+          type: 'horizontalBar',
+            data: {
+                labels: graph_labels,
+                datasets: [{
+                    label: 'Department Wise Statistics',
+                    data: vote_percent,
+                    // data: [40, 90, 90, 90, 90, 9, 1, 72, 80, 65, 62, 10, 50, 21, 23, 95, 40],
+                    backgroundColor: [
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                    ],
+                    borderColor: [
+                    'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontSize: 14,
+                            fontFamily: 'Atkinson Hyperlegible',
+                            fontColor: '#FFFFFF',
+                            fontStyle: 'normal',
+                            fontWeight: 'bold',
+                        },
+                        gridLines: {
+                          display: false
+                        },
+                        barPercentage: 0.4,
+                        categoryPercentage: 1.0
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontSize: 0,
+                            min: 0,
+                            max: 100,
+                            // callback: function (value, index, values) {                                      
+                            //   return (value / dicti["deptCount"][graph_labels[index]]["total"] * 100).toFixed(0) + '%';
+                            // },
+                          },
+                        scaleLabel: {
+                          display: false,
+                        },
+                        gridLines: {
+                          display: false
+                        }
+                    }]
+                },
+                "animation": {
+                "duration": 1,
+                  "onComplete": function () {
+                    var chartInstance = this.chart,
+                      ctx = chartInstance.ctx;
+                    
+                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+
+                    this.data.datasets.forEach(function (dataset, i) {
+                      var meta = chartInstance.controller.getDatasetMeta(i);
+                      meta.data.forEach(function (bar, index) {
+                        var data = dataset.data[index].toString()+'%';
+                        ctx.fillText(data, bar._model.x + 15, bar._model.y);
+                      });
+                    });
+                  }
+              },
+                legend: {
+                  display: false,
+                },
+                tooltips: {
+                  enabled: false,
+                },
+                title: {
+                    display: true,
+                    text: 'Department Wise Statistics',
+                    fontFamily: 'Atkinson Hyperlegible Bold',
+                    fontSize: 25,
+                    fontColor: '#FFFFFF',
+                    fontStyle: 'normal',
+                    fontWeight: 'bold',
+                }
+            },
+        });
+
+        // Hostel chart
+        var ctx1 = document.getElementById('myChart1');
+        var myChart1 = new Chart(ctx1, {
+          type: 'horizontalBar',
+            data: {
+                labels: graph_labels_hostel,
+                datasets: [{
+                    label: 'Hostel Wise Statistics',
+                    data: vote_percent_hostel,
+                    // data: [40, 90, 90, 90, 90, 9, 1, 72, 80, 65, 62, 10, 50, 21, 23, 95, 40],
+                    backgroundColor: [
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                    ],
+                    borderColor: [
+                    'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                        'rgba(247, 24, 115, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontSize: 14,
+                            fontFamily: 'Atkinson Hyperlegible',
+                            fontColor: '#FFFFFF',
+                            fontStyle: 'normal',
+                            fontWeight: 'bold',
+                        },
+                        gridLines: {
+                          display: false
+                        },
+                        barPercentage: 0.4,
+                        categoryPercentage: 1.0
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontSize: 0,
+                            min: 0, 
+                            max: 1500 ,
+                            // callback: function (value, index, values) {
+                            //   return (value / dicti["totalVotedCount"] * 100).toFixed(0) + '%';
+                            // },
+                          },
+                        scaleLabel: {
+                          display: false,
+                        },
+                        gridLines: {
+                          display: false
+                        }
+                    }]
+                },
+                "animation": {
+                "duration": 1,
+                  "onComplete": function () {
+                    var chartInstance = this.chart,
+                      ctx = chartInstance.ctx;
+                    
+                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                    ctx.textAlign = 'left';
+                    ctx.textBaseline = 'middle';
+
+                    this.data.datasets.forEach(function (dataset, i) {
+                      var meta = chartInstance.controller.getDatasetMeta(i);
+                      meta.data.forEach(function (bar, index) {
+                        var data = dataset.data[index];
+                        ctx.fillText(data, bar._model.x + 15, bar._model.y);
+                      });
+                    });
+                  }
+              },
+                legend: {
+                  display: false,
+                },
+                tooltips: {
+                  enabled: false,
+                },
+                title: {
+                    display: true,
+                    text: 'Hostel Wise Statistics',
+                    fontFamily: 'Atkinson Hyperlegible Bold',
+                    fontSize: 25,
+                    fontColor: '#FFFFFF',
+                    fontStyle: 'normal',
+                    fontWeight: 'bold',
+                }
+            },
+        });
+      }
+      </script>
+  </body>
+</html>

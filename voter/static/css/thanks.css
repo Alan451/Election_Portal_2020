@@ -16,7 +16,32 @@ background-repeat: no-repeat;
 background-size: cover;
 }
 
-.thank-you {
+@media (max-width: 767px) {
+  .thank-you {
     position: relative;
-    top: 45%;
+    top: 20%;
+  }
+}
+
+@media (min-width: 767px) {
+  .thank-you {
+      position: relative;
+      top: 35%;
+  }
+}
+
+.bg-orange {
+  background:#E7690F;
+}
+
+.bg-blue-600{
+  background:#D9939E;
+}
+
+.bg-black-new{
+  background:#2E2F2F;
+}
+
+.text-or {
+  color: #E7690F;
 }

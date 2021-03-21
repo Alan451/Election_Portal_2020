@@ -10,23 +10,76 @@
 {% endblock designation_info %}
 
 {% block save_and_next %}
-    <form method="post">
+<div   class="sm:flex sm:flex-wrap w-full">
+  <div class=" w-full sm:w-7/12 md:w-5/12">
+    <div class="flex bg-gray-100 w-full rounded-lg p-5 h-full items-center">
+      <svg width="24" height="24" class = "w-6 h-6 flex-shrink-0 mr-4 =" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.317 0.588662C12.9169 0.356596 12.4625 0.234375 12 0.234375C11.5375 0.234375 11.0831 0.356596 10.683 0.588662L2.808 5.15616C2.41013 5.38693 2.07987 5.71818 1.85031 6.11675C1.62075 6.51532 1.49995 6.96721 1.5 7.42716V16.5742C1.5 17.5102 1.998 18.3742 2.808 18.8452L10.683 23.4127C11.0831 23.6447 11.5375 23.7669 12 23.7669C12.4625 23.7669 12.9169 23.6447 13.317 23.4127L21.192 18.8452C22.002 18.3757 22.5 17.5102 22.5 16.5742V7.42716C22.5 6.49116 22.002 5.62716 21.192 5.15616L13.317 0.588662ZM11.8125 2.53566C11.8695 2.50275 11.9342 2.48542 12 2.48542C12.0658 2.48542 12.1305 2.50275 12.1875 2.53566L19.1325 6.56316L12 10.7002L4.8675 6.56316L11.8125 2.53566ZM3.75 8.51616V16.5742C3.75 16.7092 3.8205 16.8307 3.9375 16.8982L10.875 20.9227V12.6487L3.75 8.51616ZM13.125 20.9227L20.0625 16.8982C20.1194 16.8653 20.1667 16.8181 20.1996 16.7612C20.2325 16.7044 20.2499 16.6399 20.25 16.5742V8.51616L13.125 12.6487V20.9227Z" fill="#2B00FF"/>
+        </svg>
+      <span>
+      <span>
+        <span class="font-ah  text-base">
+          <span class="opted-for font-bold text-gray-800 ">
+            Multi-Candidate voting: Select the candidiate(s) you want to vote for.
+        </span>
+        <br>
+        <span id="tip" class = "font-bold opacity-80">Tip: You can also use Keyboard Keys respective to the candidiate to Vote.</span>
+        </span>
+      </span>
+    </div>
+  </div>
+  <div class="sm:float-right h-full w-full sm:w-5/12 md:w-7/12 py-2">
+    <form method="post" class= "space-y-5 sm:space-x-5">
       {% csrf_token %}
-      <div class="inline mt-10 pr-7 2xl:pr-80 sm:pr-auto pl-7 sm:pl-7 space-y-4 voter-list-btn">
-        <button type="submit" class="float-right bg-black text-white h-14 w-48 text-lg text-center font-bold rounded-sm next-btn">Next</button>
-        <button type="button" class="sm:float-right relative bottom-4 mr-5 bg-custom text-custom h-14 w-48 text-lg text-center font-bold rounded-sm next-btn" id="notaButton">NOTA</button>
-      </div>  
+        <button id="next-btn" type="submit"  class="opacity-10 cursor-not-allowed sm:mr-auto float-right bg-black text-white h-16 sm:h-14 w-full sm:w-48 text-xl sm:text-lg text-center font-bold rounded-sm next-btn px-5 green_ki_ma_ki_black" disabled>Save</button>
+        <button id="nota" type="button" class="float-right  bg-custom text-custom h-16 sm:h-14 w-full sm:w-48 text-xl sm:text-lg text-center font-bold rounded-sm next-btn px-5">NOTA</button>
       {% for i in contestantList %}
-        <input type="checkbox" style="opacity: 0; height: 0; width: 0;" name="choice" id="hidden{{i.pk}}" value="{{i.pk}}">  
-        
+        <input type="checkbox" style="opacity: 0; height: 0; width: 0;" name="choice" id="hidden{{i.pk}}" value="{{i.pk}}">
       {% endfor %}
       <input type="checkbox" style="opacity: 0; height: 0; width: 0;" class="hidden_inputs" name="nota" id="hiddenNOTA" value="NOTA">
-    </form>  
+    </form>
+  </div>
+</div>
+<div class="w-full h-32 block sm:hidden">
+
+</div>
 {% endblock save_and_next %}  
 
 {% block content %}
+<!-- <div class="sm:flex sm:flex-wrap w-full "> -->
+  <div id="warning-msg" class=" transition duration-500 ease-in-out text-white px-6 py-4 border-0 rounded relative mb-4 bg-purple-600">
+   <span class=" inline-block mb-3 align-middle">
+        <svg width="16" height="16" viewBox="0 0 16 16" class = " w-6 h-6 flex-shrink-0 mr-4 =" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.0009 0.25C8.14091 0.24991 8.27815 0.289014 8.39709 0.362887C8.51603 0.43676 8.61192 0.542452 8.6739 0.668L10.5559 4.483L14.7659 5.095C14.9044 5.11511 15.0344 5.17355 15.1414 5.26372C15.2484 5.35388 15.328 5.47218 15.3713 5.60523C15.4146 5.73829 15.4198 5.8808 15.3863 6.01665C15.3528 6.1525 15.282 6.27628 15.1819 6.374L12.1359 9.344L12.8549 13.536C12.8786 13.6739 12.8633 13.8157 12.8106 13.9454C12.7579 14.0751 12.67 14.1874 12.5568 14.2697C12.4436 14.352 12.3096 14.401 12.17 14.4111C12.0304 14.4212 11.8908 14.3921 11.7669 14.327L8.0009 12.347L4.2349 14.327C4.11108 14.392 3.97156 14.4211 3.83209 14.411C3.69261 14.4009 3.55874 14.352 3.44558 14.2699C3.33242 14.1877 3.24449 14.0755 3.19171 13.946C3.13893 13.8165 3.12341 13.6749 3.1469 13.537L3.8669 9.343L0.818897 6.374C0.718463 6.27632 0.647396 6.15247 0.613749 6.01647C0.580101 5.88047 0.585219 5.73777 0.628521 5.60453C0.671824 5.47129 0.75158 5.35284 0.858753 5.26261C0.965925 5.17238 1.09623 5.11397 1.2349 5.094L5.4449 4.483L7.3279 0.668C7.38988 0.542452 7.48576 0.43676 7.6047 0.362887C7.72364 0.289014 7.86088 0.24991 8.0009 0.25V0.25Z" fill="white"/>
+            </svg>
+        
+        
+    </span>
+    <span class="inline-block text-lg align-middle mr-8">
+      <b class="capitalize">NOTE!</b> In this section you can vote for <b>MULTIPLE CANDIDATES </b> and the order you vote in is not considerd i.e, the voting is <b>NOT PREFERENTIAL</b>
+    </span>
+    <button id="warning-btn" class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none">
+      <span>×</span>
+    </button>
+  </div>
+  <!-- <div class=" w-full ">
+    <div class="flex bg-red-300 bg-opacity-10 w-full rounded-lg p-5 h-full items-center">
+       <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z"></path></svg> -->
+      <!-- <svg xmlns="http://www.w3.org/2000/svg" class = "w-6 h-6 flex-shrink-0 mr-4 =" viewBox="0 0 24 24" width="48" height="48"><path d="M13 17.5a1 1 0 11-2 0 1 1 0 012 0zm-.25-8.25a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0v-4.5z"></path><path fill-rule="evenodd" d="M9.836 3.244c.963-1.665 3.365-1.665 4.328 0l8.967 15.504c.963 1.667-.24 3.752-2.165 3.752H3.034c-1.926 0-3.128-2.085-2.165-3.752L9.836 3.244zm3.03.751a1 1 0 00-1.732 0L2.168 19.499A1 1 0 003.034 21h17.932a1 1 0 00.866-1.5L12.866 3.994z"></path></svg>
+      <span>
+      <span>
+        <span class="font-ah  text-xl">
+          <div class="font-bold text-red-700 ">
+           <span class=" float-left">In this section you can vote for multiple candidiates<span> <button class=" float-right text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-green-600 rounded text-base">Got It</button>
+           </div>
+        
+        </span>
+      </span>
+    </div>
+  </div> --> 
+
 {{ pks|json_script:"pks-data" }}
-  <ul class="nota-effect space-y-4 sm:space-y-0 sm:flex sm:space-x-4">
+  <ul class="nota-effect pt-4 space-y-4 sm:space-y-0 sm:flex sm:space-x-4">
       {% for i in contestantList %}
         <li id="{{i.pk}}"
           class="custom-li hover:shadow transition-colors duration-300 ease-in-out bg-gray-50 border-2 border-black pl-4 rounded-md flex space-x-4"
@@ -40,7 +93,7 @@
           </span>
           <span class="py-6">
             <span><img
-                class="rounded-sm"
+                class="rounded-sm lozad"
                 width="130"
                 src="{% static i.pic %}" />
             </span>
@@ -48,12 +101,13 @@
           <span class="py-6"
             ><p class="text-xl font-bold text-gray-800">{{i.name}}</p>
             <ul
-              class="font-medium max-w-md space-y-1 text-1xl pt-2 text-gray-600"
+              class="pr-2 font-medium max-w-md space-y-1 text-1xl pt-2 text-gray-600"
             >
-              <li>{{i.agenda1}}</li>
-              <li>{{i.agenda2}}</li>
-              <li>{{i.agenda3}}</li>
-              <li>{{i.agenda4}}</li>
+              <li>1. {{i.agenda1}}</li>
+              <li>2. {{i.agenda2}}</li>
+              <li>3. {{i.agenda3}}</li>
+              <li>4. {{i.agenda4}}</li>
+
             </ul>
           </span>
         </li>
@@ -66,20 +120,6 @@
    <script>
     var len = "{{max_len}}";
   var l = parseInt(len);
-       // function call_post_req(){
-    //   post_req(vote_chosen);
-    // }
-  
-
-    // function post_req(data) {
-    //     var allCookies = document.cookie;
-    //     var csrf = allCookies.substring(10);
-    //     var postdata = {
-    //         choice: data,
-    //         'csrfmiddlewaretoken': csrf
-    //     };
-    //     $.post('/voter/vote/', postdata);
-    // }
   </script> 
 {% endblock content %}
 
@@ -89,7 +129,20 @@
       var ids = JSON.parse(document.getElementById('pks-data').textContent);
       getIds(ids);
       setProgress('{{post}}', {{request.session.total_no}});
+
+      $("#warning-btn").click(function(){
+        // $("#warning-msg").css("opacity", "0");
+        $("#warning-msg").fadeOut(1000);
+        $("#warning-msg").css("display", "none");
+      });
+      const observer = lozad(); // lazy loads elements with default selector as '.lozad'
+      observer.observe();
     });
+    window.addEventListener('load', (event) => {
+      // window.alert("You can Vote for Multiple Candidiates in this section")
+      // M.toast({html: 'I am a toast!'})
+    });
+
   </script>
   <script src="{% static 'js/svote.js' %}"></script>
 {% endblock vote_js %}

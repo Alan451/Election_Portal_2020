@@ -29,3 +29,6 @@ class notaCount(models.Model):
 
     post = models.CharField(max_length=7, choices=CATEGORY,unique=True)
     vote_count = models.IntegerField(default=0)
+
+class taskid(models.Model):
+    task_id = models.CharField(max_length=100,unique=True)

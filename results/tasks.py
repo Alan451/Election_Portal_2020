@@ -56,7 +56,7 @@ def do_work(self):
     voters = Voter.objects.all().filter(final_submit=True)
     for i in range(len(voters)):
         # print(voters[i])
-        backup_votes(voters[i].vote_string1, voters[i].vote_string2, voters[i].vote_time)
+        # backup_votes(voters[i].vote_string1, voters[i].vote_string2, voters[i].vote_time)
         vote_string = decryptCipherText(voters[i].vote_string1,voters[i].vote_time)+decryptCipherText(voters[i].vote_string2,voters[i].vote_time)
         # print(vote_string)
         if voters[i].category == '0' or voters[i].category == '1':

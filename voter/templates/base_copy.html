@@ -1,15 +1,23 @@
 {% load static %}
+{% load tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
         <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
         <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
 
         <link rel="stylesheet" href="{% static 'css/base_copy.css' %}">
+        <link rel="stylesheet" href="{% static 'css/nav.css' %}">
 
         {% block vote_js %} {% endblock vote_js %}
 
@@ -17,23 +25,230 @@
         <title>Gymkhana Elections 2021</title>
 </head>
 <body>
-  <div class="progress-bar w-full bg-black h-4">
-    <div class="progress h-4" style="background-color: #2B00FF;"></div>
+  <style>
+    .active::after{
+    content : "";
+    display: inline-block;
+    height: 18px;
+    width:18px;
+    background: white;
+    position: absolute;
+    top: 50%;
+    justify-self: center;
+    left: 0%;
+    border-radius: 100%;
+    transform: translate(-50%,-50%);
+  }
+  .line::before{
+    content : "";
+    display: inline-block;
+    width:5px;
+    bottom:0;
+    background:#585959;
+    position: absolute;
+    top: 0;
+    justify-self: center;
+    left: 0%;
+    transform: translate(-50%,0);
+  }
+  .voted::after{
+    content : "";
+    display: inline-block;
+    height: 15px;
+    width:15px;
+    background: #6FA4F3;
+    position: absolute;
+    top: 50%;
+    justify-self: center;
+    left: 0%;
+    border-radius: 100%;
+    transform: translate(-50%,-50%);
+  }
+  .nota::after{
+    content : "";
+    display: inline-block;
+    height: 15px;
+    width:15px;
+    background: #F3AC81;
+    position: absolute;
+    top: 50%;
+    justify-self: center;
+    left: 0%;
+    border-radius: 100%;
+    transform: translate(-50%,-50%);
+  }
+  .null::after{
+    content : "";
+    display: inline-block;
+    height: 15px;
+    width:15px;
+    background: #585959;
+    position: absolute;
+    top: 50%;
+    justify-self: center;
+    left: 0%;
+    border-radius: 100%;
+    transform: translate(-50%,-50%);
+  }
+  .legend-active::after{
+    content : "";
+    display: inline-block;
+    height: 10px;
+    width:10px;
+    background: white;
+    position: absolute;
+    top: 50%;
+    justify-self: center;
+    left: 0%;
+    border-radius: 100%;
+    transform: translate(-50%,-50%);
+  }
+  .legend-nota::after{
+    content : "";
+    display: inline-block;
+    height: 10px;
+    width:10px;
+    background: #F3AC81;
+    position: absolute;
+    top: 50%;
+    justify-self: center;
+    left: 0%;
+    border-radius: 100%;
+    transform: translate(-50%,-50%);
+  }
+  .legend-voted::after{
+    content : "";
+    display: inline-block;
+    height: 10px;
+    width:10px;
+    background: #6FA4F3;
+    position: absolute;
+    top: 50%;
+    justify-self: center;
+    left: 0%;
+    border-radius: 100%;
+    transform: translate(-50%,-50%);
+  }
+
+
+  .green_ki_ma_ki_black:focus{
+  background-color: #2E2F2F !important;
+}
+.green_ki_ma_ki_blue:focus{
+  background-color: #2E2F2F !important;
+}
+.green_ki_ma_ki_orange:focus{
+  background-color: #2E2F2F !important;
+}
+  
+  
+  </style>
+  
+  <img class = "fixed right-0 top-0 sm:h-32 h-16 z-50 hidden sm:block " src = "{% static 'iitg.jpg' %}"></img>
+  <div id="primary_nav" class="fixed pt-2 block w-36 left-0 h-full z-10 bg-black">
+    <ul class="block mt-8 list-none text-left transition no-underline text-white font-bold text-xl ml-4">
+      {% for i in ham %}
+        {% if i.1|startswith %}
+        <!-- Selected -->
+          <li><button onclick="hamClick(this.id, '{{i.0}}')" id= "ham-{{forloop.counter}}" Class="relative line active h-12 w-full pl-7 text-left  green_ki_ma_ki_black  waves-effect waves-light cursor-pointer bg-white bg-opacity-20">{{i.0}}</button></li>
+        {% elif i.1 == "-1"%}
+         <!-- Inactive -->
+          <li><button onclick="hamClick(this.id, '{{i.0}}')" id= "ham-{{forloop.counter}}" Class="relative line null opacity-50 pl-7 text-left h-12 w-full  green_ki_ma_ki_black waves-effect waves-light cursor-pointer hover:bg-white hover:bg-opacity-20">{{i.0}}</button></li>
+        {% elif i.1 == "NOTA" %}
+         <!-- NOTA -->
+          <li><button onclick="hamClick(this.id, '{{i.0}}')" id="ham-{{forloop.counter}}" Class="relative line nota pl-7 text-left h-12 w-full  green_ki_ma_ki_orange cursor-pointer waves-effect waves-light hover:bg-white hover:bg-opacity-20">{{i.0}}</button></li>
+        {% elif i.1 != "-2" %}
+         <!-- Voted --> 
+          <li><button onclick="hamClick(this.id, '{{i.0}}')" id="ham-{{forloop.counter}}" Class="relative line voted waves-effect waves-light pl-7 text-left h-12 w-full  green_ki_ma_ki_blue cursor-pointer hover:bg-white hover:bg-opacity-20">{{i.0}}</button></li>
+        {% endif %}
+      {% endfor %}
+      <br>
+      <li class="relative legend-active h-10 w-full pl-7 text-left cursor-default py-2.5 text-align-center text-base">Selected</li>
+      <li class="relative legend-voted h-10 w-full pl-7 text-left cursor-default py-2.5 text-align-center text-base">Voted</li>
+      <li class="relative legend-nota h-10  w-full pl-7 text-left cursor-default py-2.5 text-align-center text-base">NOTA</li>
+    </ul>
   </div>
 
-  <div class="relative flex flex-row w-full h-40 sm:h-40 lg:h-40 bg-black">
-    <p class="relative top-10 sm:top-20 text-white pl-5 sm:pl-20 text-xl sm:text-3xl md:text-4xl 2xl:text-5xl" id="title">{% block designation %} {% endblock designation %}</p>
-    <button id="info-btn" class="relative bottom-5 sm:top-7 ml-5"><img src="{% static 'info.png' %}" alt=""></button>
-    <p id="info-txt" class="hidden relative top-8 sm:top-12 md:top-16 lg:top-5 ml-5 text-xs lg:text-base text-white w-60 sm:w-80 md:w-96">Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti vitae asperiores rerum, aspernatur aut facilis ad ducimus nihil magnam aliquid fugit molestias blanditiis quod cumque quidem quo aliquam eaque. Rem.</p>
-  </div>
+  <!-- {{ham}}
+  .0 -> post-name
+  .1 -> Current => current location
+  .1 -> -1 => upcomming
+  .1 -> NOTA => nota
+  .1 -> -2 => don't display
+  .1 -> other number => pk -->
+
+  <div class="fixed top-0 z-30 flex flex-row w-full h-32 bg-black pt-12 pl-6 items-center">
+    <a href="#" id="mobile_nav" class="relative z-50 no-underline pr-6 sm:pr-16 pb-1"><svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.25 6.1875C2.25 5.73995 2.42779 5.31072 2.74426 4.99426C3.06072 4.67779 3.48995 4.5 3.9375 4.5H32.0625C32.2841 4.5 32.5035 4.54365 32.7083 4.62845C32.913 4.71326 33.099 4.83756 33.2557 4.99426C33.4124 5.15096 33.5367 5.33698 33.6215 5.54172C33.7064 5.74646 33.75 5.96589 33.75 6.1875C33.75 6.40911 33.7064 6.62854 33.6215 6.83328C33.5367 7.03802 33.4124 7.22404 33.2557 7.38074C33.099 7.53744 32.913 7.66174 32.7083 7.74655C32.5035 7.83135 32.2841 7.875 32.0625 7.875H3.9375C3.48995 7.875 3.06072 7.69721 2.74426 7.38074C2.42779 7.06428 2.25 6.63505 2.25 6.1875V6.1875ZM2.25 17.4375C2.25 16.9899 2.42779 16.5607 2.74426 16.2443C3.06072 15.9278 3.48995 15.75 3.9375 15.75H32.0625C32.5101 15.75 32.9393 15.9278 33.2557 16.2443C33.5722 16.5607 33.75 16.9899 33.75 17.4375C33.75 17.8851 33.5722 18.3143 33.2557 18.6307C32.9393 18.9472 32.5101 19.125 32.0625 19.125H3.9375C3.48995 19.125 3.06072 18.9472 2.74426 18.6307C2.42779 18.3143 2.25 17.8851 2.25 17.4375V17.4375ZM3.9375 27C3.48995 27 3.06072 27.1778 2.74426 27.4943C2.42779 27.8107 2.25 28.2399 2.25 28.6875C2.25 29.1351 2.42779 29.5643 2.74426 29.8807C3.06072 30.1972 3.48995 30.375 3.9375 30.375H32.0625C32.5101 30.375 32.9393 30.1972 33.2557 29.8807C33.5722 29.5643 33.75 29.1351 33.75 28.6875C33.75 28.2399 33.5722 27.8107 33.2557 27.4943C32.9393 27.1778 32.5101 27 32.0625 27H3.9375Z" fill="white"/>
+    </svg>
+    </a>
+    <p class="text-white z-40 text-3xl md:text-4xl" style="font-family: Atkinson Hyperlegible Bold" id="title">{% block designation %} {% endblock designation %}</p>
+    <!-- <a class="tooltipped p-4" data-position="right" data-tooltip="I am a tooltip" id="info-btn"><svg width="24" height="24" viewBox="0 0 23 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12.1562 6.5C12.1562 6.76522 12.0509 7.01957 11.8634 7.20711C11.6758 7.39464 11.4215 7.5 11.1562 7.5C10.891 7.5 10.6367 7.39464 10.4491 7.20711C10.2616 7.01957 10.1562 6.76522 10.1562 6.5C10.1562 6.23478 10.2616 5.98043 10.4491 5.79289C10.6367 5.60536 10.891 5.5 11.1562 5.5C11.4215 5.5 11.6758 5.60536 11.8634 5.79289C12.0509 5.98043 12.1562 6.23478 12.1562 6.5ZM9.15625 10.25C9.15625 10.0511 9.23527 9.86032 9.37592 9.71967C9.51657 9.57902 9.70734 9.5 9.90625 9.5H11.4062C11.6052 9.5 11.7959 9.57902 11.9366 9.71967C12.0772 9.86032 12.1562 10.0511 12.1562 10.25V14.5H12.9062C13.1052 14.5 13.2959 14.579 13.4366 14.7197C13.5772 14.8603 13.6562 15.0511 13.6562 15.25C13.6562 15.4489 13.5772 15.6397 13.4366 15.7803C13.2959 15.921 13.1052 16 12.9062 16H9.90625C9.70734 16 9.51657 15.921 9.37592 15.7803C9.23527 15.6397 9.15625 15.4489 9.15625 15.25C9.15625 15.0511 9.23527 14.8603 9.37592 14.7197C9.51657 14.579 9.70734 14.5 9.90625 14.5H10.6562V11H9.90625C9.70734 11 9.51657 10.921 9.37592 10.7803C9.23527 10.6397 9.15625 10.4489 9.15625 10.25Z" fill="white"/>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M11.1562 0C5.08125 0 0.15625 4.925 0.15625 11C0.15625 17.075 5.08125 22 11.1562 22C17.2313 22 22.1562 17.075 22.1562 11C22.1562 4.925 17.2313 0 11.1562 0ZM1.65625 11C1.65625 8.48044 2.65714 6.06408 4.43874 4.28249C6.22033 2.50089 8.63669 1.5 11.1562 1.5C13.6758 1.5 16.0922 2.50089 17.8738 4.28249C19.6554 6.06408 20.6562 8.48044 20.6562 11C20.6562 13.5196 19.6554 15.9359 17.8738 17.7175C16.0922 19.4991 13.6758 20.5 11.1562 20.5C8.63669 20.5 6.22033 19.4991 4.43874 17.7175C2.65714 15.9359 1.65625 13.5196 1.65625 11Z" fill="white"/>
+      </svg>
+    </a> -->
+</div>
+
   
-  <div class="mt-10 mb-20 pr-7 2xl:pr-80 sm:pr-auto pl-7 sm:pl-7 space-y-4 voter_list">
+  <div class="container lg:pl-40 xl:pl-18 mt-32 pt-8 mb-20 pr-7 2xl:pr-80 sm:pr-auto pl-7 sm:pl-7 space-y-4">
     {% block content %}
     {% endblock content %}
     
     {% block save_and_next %}
     {% endblock save_and_next %}
   </div>
-  
+  <script>
+     document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.tooltipped');
+        var instances = M.Tooltip.init(elems, {});
+      });
+
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+      }
+
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+  </script>
+
+  <script src="{% static 'js/nav.js' %}"></script>
+  <script>
+    $(document).ready(function(){
+    let selected_new = '{{selected}}';
+    var res = selected_new.split(" ");
+    for(var i=1;i<res.length;i++){
+        if(res[i]=="NOTA"){
+          res[i]="nota";
+        }
+        $("#" + res[i]).trigger("click"); 
+      }
+      
+    });
+    function hamClick(idstr,poststr){
+        // console.log(idstr);
+        var id = parseInt(idstr.substr(4,idstr.length-1));
+        if (id<9){
+          var post_value = poststr.toLowerCase();
+          // console.log(post_value);
+          
+          var temp = "{% url 'vote' %}";
+          // console.log(temp);
+          var post = temp+post_value;
+        } 
+        else if(id==11){
+          var post = "{%url 'named_vote' 'gsen' %}";
+          
+        }
+        else{
+          var post = "{% url 'named_vote' 'bsen' %}";
+        }
+        window.location.href = post;
+      };
+    
+    // console.log(selected_new);
+  </script>
+
 </body>
 </html>

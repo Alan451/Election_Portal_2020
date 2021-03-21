@@ -1,3 +1,4 @@
+backup_votes.csv
 # database
 mydatabase
 
@@ -5,3 +6,10 @@ mydatabase
 migrations/
 
 #oauth secerts
+voter.csv
+contestant.csv
+*.pyc
+images/
+static/agenda
+static/contestants*
+electioniitg/settings.py

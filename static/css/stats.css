@@ -1,0 +1,73 @@
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('../fonts/regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible Bold';
+  src: url('../fonts/bold.ttf') format('truetype');
+}
+
+.font-ah {
+  font-family: Atkinson Hyperlegible;
+}
+
+.font-bold {
+  font-family: Atkinson Hyperlegible Bold;
+}
+
+.bg-gray-50{
+  background-color: #f9f9f969;
+}
+.text-gray-800{
+  color: #4C4D4D;
+}
+.text-gray-600{
+  color: #4C4D4D;
+}
+.bg-black{
+  background-color: #2E2F2F;
+}
+.border-black{
+  border-color: #2E2F2F;
+}
+
+.bg-gray-50:hover{
+  background-color: #EAEAEA;
+}
+.bg-gray-200{
+  background-color: #EAEAEA;
+}
+
+#title {
+  font-family: Atkinson Hyperlegible;
+  font-weight: bold;
+  
+}
+
+.shadow{
+  --tw-shadow: 0 1px 4px 0 rgba(58, 58, 58, 0.034), 0 1px 4px 0 rgba(88, 88, 88, 0.021);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.bg-orange {
+  background:#E7690F;
+}
+
+.bg-blue-500{
+  background:#2B00FF;
+}
+
+.bg-pink-5000 {
+  background:#F487B6;
+}
+
+.custom-li {
+  min-width: 50%;
+}
+
+@media (max-width: 1024px) {
+  .h-screen-60 {
+    height: 75vh;
+  }
+}

@@ -7,3 +7,8 @@ register = template.Library()
 @register.filter
 def to_char(value):
     return chr(value+64)
+
+@register.filter('startswith')
+def startswith(text):
+    return text.startswith("Current")
+    

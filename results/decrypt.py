@@ -25,8 +25,8 @@ def decryptCipherText(cipher_text, vote_time):
   files=[]
   try:    
     users.append(User.objects.get(username='swc@iitg.ac.in'))
-    users.append(User.objects.get(username='alan@iitg.ac.in'))
-    users.append(User.objects.get(username='saketkumar@iitg.ac.in'))  
+    users.append(User.objects.get(username='elections@iitg.ac.in'))
+    users.append(User.objects.get(username='dos@iitg.ac.in'))  
 
     files.append(keys.objects.get(user = users[0]))
     files.append(keys.objects.get(user = users[1]))

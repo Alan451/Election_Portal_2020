@@ -1,46 +1,60 @@
 {% extends 'base_cop_review.html' %}
 {% load static %}
 {% block content %}
-<div class="relative w-full text-center h-20 sm:h-32 lg:h-36 bg-black">
-    <p class="relative font-bold top-7 sm:top-16 text-white text-2xl sm:text-3xl md:text-4xl" id="title">Review Your Ballot</p>
+<img class = "fixed right-0 top-0 sm:h-32 h-16 z-50 hidden sm:block " src = "{% static 'iitg.jpg' %}"></img>
+<div class="fixed  top-0 z-40 w-full h-32 lg:h-32 bg-black">
+    <p class="relative  ml-10  font-bold top-16 text-white text-3xl md:text-4xl " id="title">Review Your Ballot</p>
 </div>
-
+<div class = "mt-40 "></div>
+<div id="warning-msg" class=" font-ah w-3/4 ml-6 sm:ml-10 transition duration-500 ease-in-out text-white px-6 py-4 border-0 rounded relative mb-4 bg-purple-600">
+    <span class="text-lg inline-block mb-3 lg:mb-0 align-middle">
+        <svg width="16" height="16" viewBox="0 0 16 16" class = " w-6 h-6 flex-shrink-0 mr-4 =" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.0009 0.25C8.14091 0.24991 8.27815 0.289014 8.39709 0.362887C8.51603 0.43676 8.61192 0.542452 8.6739 0.668L10.5559 4.483L14.7659 5.095C14.9044 5.11511 15.0344 5.17355 15.1414 5.26372C15.2484 5.35388 15.328 5.47218 15.3713 5.60523C15.4146 5.73829 15.4198 5.8808 15.3863 6.01665C15.3528 6.1525 15.282 6.27628 15.1819 6.374L12.1359 9.344L12.8549 13.536C12.8786 13.6739 12.8633 13.8157 12.8106 13.9454C12.7579 14.0751 12.67 14.1874 12.5568 14.2697C12.4436 14.352 12.3096 14.401 12.17 14.4111C12.0304 14.4212 11.8908 14.3921 11.7669 14.327L8.0009 12.347L4.2349 14.327C4.11108 14.392 3.97156 14.4211 3.83209 14.411C3.69261 14.4009 3.55874 14.352 3.44558 14.2699C3.33242 14.1877 3.24449 14.0755 3.19171 13.946C3.13893 13.8165 3.12341 13.6749 3.1469 13.537L3.8669 9.343L0.818897 6.374C0.718463 6.27632 0.647396 6.15247 0.613749 6.01647C0.580101 5.88047 0.585219 5.73777 0.628521 5.60453C0.671824 5.47129 0.75158 5.35284 0.858753 5.26261C0.965925 5.17238 1.09623 5.11397 1.2349 5.094L5.4449 4.483L7.3279 0.668C7.38988 0.542452 7.48576 0.43676 7.6047 0.362887C7.72364 0.289014 7.86088 0.24991 8.0009 0.25V0.25Z" fill="white"/>
+            </svg>
+    </span>
+    <span class="inline-block align-middle mr-8 text-lg">
+      <b class="capitalize font-bold">TIP!</b> Review your votes before submiting. You can also <b class="capitalize font-bold">CHANGE</b> your votes by selecting the candidiate
+    </span>
+    <button id="warning-btn" class="absolute bg-transparent text-2xl font-bold  leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none">
+      <span>×</span>
+    </button>
+  </div>
 <form method="post">
     {% csrf_token %}
     {% for candidate in selectedCandidates %}
         
         {% if candidate.0 == "VP" %}
             <br>
-            <p class="ml-5 sm:ml-10 text-2xl sm:text-3xl">Vice President</p>
+            <p class="ml-5 font-bold sm:ml-10 text-2xl sm:text-3xl">Vice President</p>
             <ul class="sm:flex sm:flex-wrap space-x-7 sm:space-x-10">
                 <button class="mt-3 mb-3 ml-5 sm:mt-5 sm:mb-5 sm:ml-10" type="submit" name="choice" value={{candidate.2}}>
                     <li id="{{candidate.0}}"
                     class="{{candidate.0}} py-5 hover-effect w-40 hover:shadow transition-colors duration-300 ease-in-out bg-gray-50 border-2 border-black px-4 rounded-md">
-                        <span  class="py-4 content-center ">
+                        <span class="py-4 content-center">
                             <span
-                                class="relative bottom-2 self-center transition-opacity duration-500 ease-in-out m-auto border border-black rounded-md bg-gray-100 text-base font-bold px-3 py-2 ">
-                                <span class="text_{{candidate.0}} hidden" >Review</span><span class="index_{{candidate.0}}">{{candidate.0}}
+                                class="bg_{{candidate.0}} relative bottom-2 bg-black text-white self-center transition-opacity duration-500 ease-in-out m-auto border border-black rounded-md bg-gray-100 text-base font-bold px-3 py-2 ">
+                                <span class="text_{{candidate.0}} hidden " >Change Vote</span><span class="index_{{candidate.0}}">{{candidate.0}}
                                 </span>
                             </span>
                         </span>
                         {% if candidate.1 == "NOTA" %}
                             <span class="py-6">
                                 <span><img
-                                    class="rounded-sm"
-                                    width="130"
+                                    class="rounded-sm mt-3"
+                                    width="130  "
                                     src="{% static 'contestants/Nota.jpeg' %}" />
                                 </span>
                             </span>
-                            <p class="ml-0 text-center text-xl font-bold text-gray-800">NOTA</p>
+                            <p class="ml-0 mt-3 text-center text-lg font-bold text-gray-800">NOTA</p>
                         {% else %}
                             <span class="py-6">
                                 <span><img
-                                    class="rounded-sm"
+                                    class="rounded-sm mt-3"
                                     width="130"
                                     src="{% static candidate.1.pic %}" />
                                 </span>
                             </span>
-                            <p class="ml-0 text-center text-xl font-bold text-gray-800">{{candidate.1.name}}</p>
+                            <p class="ml-0 mt-3 text-center text-lg font-bold text-gray-800">{{candidate.1.name}}</p>
                         {% endif %}
                     </li>
                 </button>
@@ -49,7 +63,7 @@
         {% endif %}
 
         {% if forloop.counter == 2 %}
-            <p class="ml-5 sm:ml-10 text-2xl sm:text-3xl">Boards</p>
+            <p class="ml-5 font-bold sm:ml-10 text-2xl sm:text-3xl">Boards</p>
             <ul class="sm:flex sm:flex-wrap space-x-7 sm:space-x-10">
             <button class="mt-3 mb-3 ml-5 sm:mt-5 sm:mb-5 sm:ml-10" type="submit" name="choice" value={{candidate.2}}>
         {% endif %}
@@ -61,9 +75,9 @@
                 <li id="{{candidate.0}}"
                 class="{{candidate.0}} py-5 hover-effect w-40 hover:shadow transition-colors duration-300 ease-in-out bg-gray-50 border-2 border-black px-4 rounded-md">
                     <span  class="py-4 content-center ">
-                        <span id = "action_box_container_{{candidate.0}}"
-                            class="relative bottom-2 self-center transition-opacity duration-500 ease-in-out m-auto border border-black rounded-md bg-gray-100 text-base font-bold px-3 py-2 ">
-                            <span class="text_{{candidate.0}} hidden" >Review</span><span class="index_{{candidate.0}}">
+                        <span
+                            class="bg_{{candidate.0}} relative bottom-2 bg-black text-white self-center transition-opacity duration-500 ease-in-out m-auto border border-black rounded-md bg-gray-100 text-base font-bold px-3 py-2 ">
+                            <span class="text_{{candidate.0}} hidden" >Change Vote</span><span class="index_{{candidate.0}}">
                                 {{candidate.0}}
                             </span>
                         </span>
@@ -71,21 +85,21 @@
                     {% if candidate.1 == "NOTA" %}
                         <span class="py-6">
                             <span><img
-                                class="rounded-sm"
+                                class="rounded-sm mt-3"
                                 width="130"
                                 src="{% static 'contestants/Nota.jpeg' %}" />
                             </span>
                         </span>
-                        <p class="ml-0 text-center text-xl font-bold text-gray-800">NOTA</p>
+                        <p class="ml-0 mt-3 text-center text-lg font-bold text-gray-800">NOTA</p>
                     {% else %}
                         <span class="py-6">
                             <span><img
-                                class="rounded-sm"
+                                class="rounded-sm mt-3"
                                 width="130"
                                 src="{% static candidate.1.pic %}" />
                             </span>
                         </span>
-                        <p class="ml-0 text-center text-xl font-bold text-gray-800">{{candidate.1.name}}</p>
+                        <p class="ml-0 mt-3 text-center text-lg font-bold text-gray-800">{{candidate.1.name}}</p>
                     {% endif %}
                 </li>
             </button>
@@ -94,31 +108,38 @@
         {% if forloop.counter == 8 %}
             <br>
             </ul>
-            <p class="ml-5 sm:ml-10 text-2xl sm:text-3xl">Senate</p>
+            <p class="ml-5 sm:ml-10 font-bold text-2xl sm:text-3xl">Senate</p>
         {% endif %}
         
         {% if forloop.counter >= 9 %}
+            {% if candidate.0 == "GS" %}
+                <p class="ml-5 sm:ml-10 font-bold text-2xl sm:text-3xl">Girls Senate</p>
+            {% endif %}
             <ul class="sm:flex sm:flex-wrap space-x-7 sm:space-x-10">
                 {% if candidate.1 == "NOTA" %}
                 <button class="mt-3 mb-3 ml-5 sm:mt-5 sm:mb-5 sm:ml-10" type="submit" name="choice" value={{candidate.2}}>
                     <li id="{{candidate.0}}"
                         class="{{candidate.0}} py-5 hover-effect w-40 hover:shadow transition-colors duration-300 ease-in-out bg-gray-50 border-2 border-black px-4 rounded-md">
                             <span  class="py-4 content-center ">
-                                <span id = "action_box_container_{{candidate.0}}"
-                                    class="relative bottom-2 self-center transition-opacity duration-500 ease-in-out m-auto border border-black rounded-md bg-gray-100 text-base font-bold px-3 py-2 ">
-                                    <span class="text_{{candidate.0}} hidden" >Review</span><span class="index_{{candidate.0}}">
-                                        {{candidate.0}}
+                                <span
+                                    class="bg_{{candidate.0}} relative bottom-2 text-white bg-black self-center transition-opacity duration-500 ease-in-out m-auto border border-black rounded-md bg-gray-100 text-base font-bold px-3 py-2 ">
+                                    <span class="text_{{candidate.0}} hidden" >Change Vote</span><span class="index_{{candidate.0}}">
+                                        {% if candidate.0 == 'GS' %}
+                                            Girls
+                                        {% else %}
+                                            {{candidate.0}}
+                                        {% endif %}
                                     </span>
                                 </span>
                             </span>
                             <span class="py-6">
                                 <span><img
-                                    class="rounded-sm"
+                                    class="rounded-sm mt-3"
                                     width="130"
                                     src="{% static 'contestants/Nota.jpeg' %}" />
                                 </span>
                             </span>
-                            <p class="ml-0 text-center text-xl font-bold text-gray-800">NOTA</p>
+                            <p class="ml-0 mt-3 text-center text-lg font-bold text-gray-800">NOTA</p>
                         </li>
                 </button>
                 {% else %}
@@ -131,21 +152,25 @@
                             <li id="{{candidate.0}}"
                                 class="{{candidate.0}} py-5 hover-effect w-40 hover:shadow transition-colors duration-300 ease-in-out bg-gray-50 border-2 border-black px-4 rounded-md">
                                     <span class="py-4 content-center ">
-                                        <span id = "action_box_container_{{cand.1.pk}}"
-                                            class="relative bottom-2 self-center transition-opacity duration-500 ease-in-out m-auto border border-black rounded-md bg-gray-100 text-base font-bold px-3 py-2 ">
-                                            <span class="text_{{candidate.0}} hidden" >Review</span><span class="index_{{candidate.0}}">
-                                                {{candidate.0}}
+                                        <span
+                                            class="bg_{{candidate.0}} relative bottom-2 bg-black text-white self-center transition-opacity duration-500 ease-in-out m-auto border border-black rounded-md bg-gray-100 text-base font-bold px-3 py-2 ">
+                                            <span class="text_{{candidate.0}} hidden" >Change Vote</span><span class="index_{{candidate.0}}">
+                                                {% if candidate.0 == 'GS' %}
+                                                    Girls
+                                                {% else %}
+                                                    {{candidate.0}}
+                                                {% endif %}
                                             </span>
                                         </span>
                                     </span>
                                     <span class="py-6">
                                         <span><img
-                                            class="rounded-sm"
+                                            class="rounded-sm mt-3"
                                             width="130"
                                             src="{% static cand.1.pic %}" />
                                         </span>
                                     </span>
-                                    <p class="ml-0 text-center text-xl font-bold text-gray-800">{{cand.1.name}}</p>
+                                    <p class="ml-0 mt-3 text-center text-lg font-bold text-gray-800">{{cand.1.name}}</p>
                             </li>
                         </button>
                     {% endfor %}
@@ -153,9 +178,31 @@
             </ul>
         {% endif %}
     {% endfor %}
-    <div class="w-full text-center mb-10">
-        <button type="submit" name="choice" value="done" class="bg-black text-white h-14 w-48 text-lg text-center font-bold rounded-sm next-btn">Submit</button>
+    <div class="w-full mx-5 sm:ml-10 mb-10 mt-10">
+        <input id="submit_pucca" type="submit" class="hidden" name="choice" value="done">
+        <button id="submit_final" type="button" class="bg-black text-white hover:bg-blue-600 h-14 w-48 text-lg text-center font-bold rounded-sm next-btn">Submit</button>
     </div>
 </form>
+
+<script>
+    $(document).ready(function () {
+      $("#warning-btn").click(function(){
+        // $("#warning-msg").css("opacity", "0");
+        $("#warning-msg").fadeOut(1000);
+        $("#warning-msg").css("display", "none");
+      });
+      $("#submit_final").click(function () {
+          if (window.confirm("Are you sure? You won't be able to go back."))
+            {
+                $("#submit_pucca").trigger("click");
+            }
+            else
+            {
+                // console.log("Mana kar diya!");
+            }
+      });
+    });
+
+  </script>
 {% endblock %}
 <!-- candidate.0 is the post and candidate.1 is the candidate object or NOTA can access any of the properties -->

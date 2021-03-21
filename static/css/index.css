@@ -1,0 +1,150 @@
+@font-face {
+    font-family: 'Atkinson Hyperlegible';
+    src: url('../fonts/regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Atkinson Hyperlegible Bold';
+    src: url('../fonts/bold.ttf') format('truetype');
+}
+
+.font-ah {
+    font-family: Atkinson Hyperlegible;
+}
+
+.font-bold {
+    font-family: Atkinson Hyperlegible Bold;
+}
+
+.partition {
+    position: absolute;
+    left: 45.06%;
+    top: 0%;
+    bottom: 0%;
+    width: 8px;
+    height: 100%;
+
+    background-color: #2E2F2F;
+}
+
+.logo-vote {
+    /* position: relative;
+    top: 35.99px;
+    left: 135.04px;
+    height: 40px; */
+    /* width: 41.81px; */
+}
+
+.logo-iitg {
+    /* position: relative;
+    top: 208.15px;
+    left: 30px;
+    height: 70px; */
+}
+
+.election-titile {
+    position: relative;
+    left: 123px;
+    top: 200px;
+    width: 45%;
+
+    font-family: Atkinson Hyperlegible;
+    font-weight: bold;
+}
+
+.rules-heading {
+    font-family: Atkinson Hyperlegible Bold;
+    /* font-weight: bold; */
+
+    color: #2E2F2F;
+}
+
+
+.text-gray-600{
+    font-family: Atkinson Hyperlegible;
+    color: #4C4D4D;
+  }
+
+p {
+    text-align: justify;
+}
+
+.tandc {
+    text-align: left;
+}
+
+div.conclusion {
+    margin-top: 8%;
+    text-align: left;
+}
+
+.buton {
+    background-color: #2E2F2F;
+    border-radius: 25px;
+    width: 300px;
+    height: 45px;
+    vertical-align: center;
+    line-height: 0px;
+    border: 0px;
+    padding-bottom: 0px;
+    position: relative;
+    left: 25%;
+
+    appearance: button;
+    /* -webkit-writing-mode: horizontal-tb !important; */
+    text-rendering: auto;
+    color: -internal-light-dark(black, white);
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    margin: 0em;
+    font: 400 13.3333px Arial;
+    padding: 1px 6px;
+  }
+  
+  #button_text {
+    font-family: Atkinson Hyperlegible;
+    font-size: 24px;
+    line-height: 25px;
+
+    color: #FFFFFF;
+  }
+
+.toast {
+    position: relative;
+    right: 25%;
+}
+
+[type="checkbox"]:checked+span:not(.lever):before {
+    border-right: 2px solid #2b00ff;
+    border-bottom: 2px solid #2b00ff;
+}
+
+button:focus {
+    outline: none;
+    background-color: #2b00ff !important;
+    color: white;
+}
+
+button:hover {
+    background-color: #2b00ff !important;
+}
+
+  /* .privacy-policy {
+    position: relative;
+    top: 9px;
+
+    font-family: Atkinson Hyperlegible;
+    font-size: 18px;
+    line-height: 19px;
+
+    color: #000000;
+    text-decoration-line: underline;
+  } */

@@ -1,0 +1,143 @@
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('../fonts/regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible Bold';
+  src: url('../fonts/bold.ttf') format('truetype');
+}
+
+body{
+  font-family: Atkinson Hyperlegible;
+}
+/* header ul { */
+  /* list-style-type: none; */
+  /* margin: 0; */
+  /* padding: 0; */
+  /* overflow: hidden; */
+  /* padding-bottom: 1%; */
+/* }
+
+header li {
+  float: left;
+}
+
+header li a {
+  display: block;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+} */
+.text-black{
+  font-family: Atkinson Hyperlegible;
+  color: #2E2F2F;
+}
+
+
+
+td.announcements {
+  padding-right: 30px;
+  /* padding-top: 30px; */
+}
+
+table.announcements {
+  border: 2px solid black;
+  border-radius: 15px;
+  margin-top: 17%;
+  border-collapse: inherit;
+  border-spacing: inherit;
+}
+
+thead tr th {
+  border-bottom: 2px solid black;
+}
+
+.announce_content {
+  font-size: 18px;
+}
+
+/* .designation_tab {
+  overflow: hidden;
+
+} */
+
+button {
+  /* background-color: inherit; */
+  /* float: left; */
+  /* border: none; */
+  /* outline: none; */
+  /* cursor: pointer; */
+  /* padding: 14px 16px; */
+  /* transition: 0.3s; */
+  font-size: 18px;
+  font-weight: bold;
+  /* margin-left: 3%; */
+}
+
+/* .designation_tab button:hover {
+  background-color: #D0CFCF;
+} */
+
+.designation_tab button.active {
+  color: #2B00FF;
+  /* text-decoration: underline; */
+  /* text-decoration-color: #2B00FF; */
+}
+
+/* .row.designation{
+  padding-top: 3%;
+} */
+
+/* img.campaigners {
+  position: relative;
+  width: 80%;
+} */
+
+.designation-list.browser-default {
+ font-size: 15px !important;
+
+}
+.agenda__link{
+    cursor :pointer ;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.hamburger{
+    display:none
+
+}
+#responsive_nav{
+  transition:all .4s ease-in-out ;
+}
+
+@media(max-width:800px){
+    .vote__button{
+        display:none ;
+    }
+    header >div{
+        justify-content: space-evenly !important;
+    }
+    nav{
+       display:none !important;
+       flex-direction:column ;
+    }
+    /* #responsive_nav{
+      
+        display:none ;
+    } */
+    .hamburger{
+      position: fixed;
+      display:contents;
+
+  
+  }
+}
+
+
+/* .nav_active{
+    display: !important ;
+} */

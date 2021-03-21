@@ -17,21 +17,18 @@ def save_user_geolocation(request):
         coord = json.loads(request.POST['data'])
         request.session['latitude']=coord['lat']
         request.session['longitude']=coord['long']
-        if request.session['latitude'] and request.session['longitude']:
-            print('sfdf')
-            request.session['location']= True
-        print(coord)
+        #print(coord)
     return redirect('captcha')
 
 @login_required
 @is_valid    
 def save_user_image(request):
     username = request.user.username
-    image_name = request.user.last_name + ".png"
     if Voter.objects.all().filter(username=username).exists():
         voter = Voter.objects.get(username=username)
     else:
         return HttpResponse('get the fuck out of here')
+    image_name = str(voter.rollNumber) + ".png"
     if request.method == 'POST':
         imagebase64= request.POST['imagebase64data']
         try:
@@ -41,7 +38,7 @@ def save_user_image(request):
             voter.save()
             request.session['image'] = True
         except Exception:
-            print('i fucked up')
+            #print('i fucked up')
             return HttpResponse('something went wrong')
         return redirect('captcha')
     else:
@@ -58,6 +55,23 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
+HOSTELS = (
+        ('0','HOSTEL NOT ALLOTED'),
+        ('1','BRAHMAPUTRA'),
+        ('2','DHANSIRI'),
+        ('3','DIBANG'),
+        ('4','DIHING'),
+        ('5','DISANG'),
+        ('6','KAMENG'),
+        ('7','KAPILI'),
+        ('8','LOHIT'),
+        ('9','MANAS'),
+        ('10','MARRIED SCHOLARS HOSTEL'),
+        ('11','SIANG'),
+        ('12','SUBHANSIRI'),
+        ('13','UMIAM'),
+        ('14','BARAK'),
+)
 @login_required
 @is_valid
 def verification(request):
@@ -67,9 +81,9 @@ def verification(request):
         
     try:
         voter = Voter.objects.get(username = request.user.username)
-        hostel = voter.hostel
+        rollNumber = voter.rollNumber
         dept = voter.dept
-        year = 21-int(request.user.last_name[:2])
+        year = 21-int(str(voter.rollNumber)[:2])
         if year == 1:
             y = "1st Year"
         elif year == 2:
@@ -82,13 +96,20 @@ def verification(request):
         return redirect('captcha')
     if not request.method=='POST':
         form = FormWithCaptcha()
-        return render(request, 'verification.html', {'form': form,'hostel':hostel,'dept':dept,'year':y,'voter_id':uid[0].upper()})
+        return render(request, 'verification.html', {'form': form,'rollNumber':rollNumber,'dept':dept,'year':y,'voter_id':uid[0].upper(),'hostel':HOSTELS})
         
     form = FormWithCaptcha(request.POST)
+    voter.hostel = request.POST.get('hostel_data','0')
+    voter.save()
+    #print(voter.get_hostel_display())
     if form.is_valid():
-        print('u are not a robot')
+        #print('u are not a robot')
         request.session['human']= True
         return redirect('vote')
     else:
         return redirect('captcha')
-    return render(request, 'verification.html', {'form': form,'hostel':hostel,'dept':dept,'year':y,'voter_id':uid[0].upper()})
+    
+    
+    return render(request, 'verification.html', {'form': form,'rollNumber':rollNumber,'dept':dept,'year':y,'voter_id':uid[0].upper(),'hostel':HOSTELS})
+
+

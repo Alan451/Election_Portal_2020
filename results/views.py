@@ -11,7 +11,7 @@ from .forms import publicKeyUploadForm
 import random
 from django.contrib.auth.models import User
 from .tasks import do_work
-from .models import notaCount
+from .models import notaCount,taskid
 from celery.result import AsyncResult
 
 post_dictionary ={
@@ -37,11 +37,11 @@ def is_authorized(user):
     except:
         print("error in results/views.py")
     try:    
-        users.append(User.objects.get(username='alan@iitg.ac.in'))
+        users.append(User.objects.get(username='elections@iitg.ac.in'))
     except:
         print("error in results/views.py")
     try:    
-        users.append(User.objects.get(username='saketkumar@iitg.ac.in'))  
+        users.append(User.objects.get(username='dos@iitg.ac.in'))  
     except:
         print("error 3")
     if user in users:
@@ -96,7 +96,6 @@ def privateKey(request):
         return redirect('keyUpload')
     return render(request, 'pubKeyupload.html', {'keyType':'Private'})
 
-running =None
 
 
 @login_required
@@ -104,20 +103,14 @@ running =None
 def results(request):
     if request.method == 'POST':
         return redirect('results_view','VP')
-    global running
-    if running is not None:
-        res = AsyncResult(running)
-        # if res.ready():
-        # #   print('kya',res.result)
-        #   task = do_work.delay()
-        #   running = task.task_id
+    tasks = taskid.objects.all()
+    if len(tasks) == 0:
+        task = do_work.delay()
+        taskid.objects.create(task_id=task.task_id)
+        running = task.task_id
     else:
-      task = do_work.delay()
-      running = task.task_id
-    try:
-        key = keys.objects.get(user = request.user)
-    except:
-        key = None
+        running = tasks[0].task_id
+        res = AsyncResult(running)
     return render(request, 'results.html', {'task_id':running})   
 
 
@@ -136,5 +129,6 @@ def results_view(request,post):
     contList = []
     for i in cont:
         contList.append((i[0],i[1],i[1]*100/sum))
-    print(contList)
+    contList.sort(key = lambda x: x[1])
+    contList.reverse()
     return render(request,'results_view.html',{'contestants':contList,'post_display':post_dictionary[post],'sum':sum,'post_list':post_dictionary.keys()})

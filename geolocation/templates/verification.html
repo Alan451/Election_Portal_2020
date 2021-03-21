@@ -4,108 +4,160 @@
 <head>
     <title>Gymkhana Elections 2021</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="{% static 'js/camvas.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/Ipoc.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/pico.js' %}"></script>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <style type="text/css">  
-        /* Flipping the video as it was not mirror view */  
-        video {  
-            -webkit-transform: scaleX(-1);  
-            transform: scaleX(-1);  
-        }
-      
-        /* Flipping the canvas image as it was not mirror view */  
-        #canvas {  
-            filter: FlipH;  
-            -ms-filter: "FlipH";
-            transform: scale(0.75, 0.7);
-        }
-        
-        @media (min-width: 640px) { 
-            #canvas {
-                transform: scale(0.75, 0.7);
-            }
-        }
-        
-        @media (min-width: 1500px) {
-            /* #btnCapture {
-                position: relative;
-                left: 25px;
-            } */
-
-            /* .form-class {
-                position: relative;
-                left: 70px;
-            } */
-
-            #canvas {
-                position: relative;
-                right: 30px;
-                transform: scale(0.8, 0.95);
-            }
-        }
-        
-        /* @media (min-width: 1600px) { */
-            /* #btnCapture {
-                position: relative;
-                left: 50px; */
-            /* } */
-
-            /* .form-class {
-                position: relative;
-                left: 55px;
-            } */
-        /* } */
-
-        @media (min-width: 1700px) {
-            #canvas {
-                transform: scale(1, 1);
-            }
-        }
-    </style>
     <link rel="stylesheet" href="{% static 'css/verification.css' %}">
     
 </head>
 <body onload="geoFindMe();button_callback();">
+    <style>
+        .lds-dual-ring {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+        }
+        .lds-dual-ring:after {
+        content: " ";
+        display: block;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 6px solid #fff;
+        border-color: #fff transparent  #fff transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+        }
+        @keyframes lds-dual-ring {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+        }
 
+        .select-wrapper input.select-dropdown:focus {
+            border-bottom: 1px solid #2E2F2F !important;
+            }
+        .dropdown-content li>a, .dropdown-content li>span {
+            font-size: 16px;
+            color: #2E2F2F !important;
+            display: block;
+            line-height: 22px;
+            padding: 14px 16px;
+            }
+    </style>
+        <script>
+            
+        $(document).ready(function(){
+            $('select').formSelect();
+        });
+        </script>
 
-    <div class="grid grid-rows-6 grid-cols-none lg:grid-rows-5 lg:grid-cols-10">
-        <div id="video-resize" class="place-self-center lg:place-self-auto relative lg:left-8 top-12 lg:top-32 lg:col-start-2 lg:col-span-3 row-start-1 row-span-3">
-            <p class="relative top-10 lg:top-0 px-12 lg:px-0 text-left text-3xl lg:text-2xl">Please allow camera and location access on your device :)</p>
-            <br>
-            <div class="relative lg:right-10">
-                <canvas style="background-color:white;" id="canvas" width="640" height="480"></canvas>
-            </div>
-        </div>
-        <div class="place-self-center lg:place-self-auto -mt-72 lg:mt-0 col-start-1 lg:col-start-6 lg:col-span-4 row-start-5 row-span-3 lg:row-start-2 lg:row-span-3">
-            <p class="px-10 lg:px-0 text-5xl">{{request.user.first_name}}</p>
-            <p class="px-10 lg:px-0 text-2xl">{{year}}  {{hostel}} hostel</p>
-            <br>
-            <p class="px-10 lg:px-0 text-xl lg:text-lg" id="status"></p>
-            <p class="px-10 lg:px-0 text-xl lg:text-lg">IP address: {{request.session.ip}}</p>
-            <p class="px-10 lg:px-0 text-xl lg:text-lg">Voter Token ID: {{voter_id}}</p>
-            <br>
-        </div>
-        <div class="form-class pl-20 sm:pl-0 col-start-1 lg:col-start-6 row-start-6 row-span-3 lg:row-start-3 lg:row-span-3">
-            <form action="" method="post"> 
-                {% csrf_token %}
-                <div class="lg:relative lg:top-24">
-                    {{ form }}
-                    <br>
-                    <input class="
-                    transition login_button relative text-black lg:top-5 bg-white border-2 border-black py-4 px-12 focus:outline-none hover:bg-blue-600 hover:text-white rounded text-lg z-60" id="continueBtn" type="submit" value="Continue" disabled>
+       
+       
+      <div
+        class=" container w-full mx-auto  flex flex-wrap p-5 md:flex-row items-center relative justify-between"
+      >
+      <svg width="161" height="36" viewBox="0 0 161 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M35.2422 21.7229C35.244 20.7033 35.427 19.779 35.7912 18.9502C36.1556 18.1213 36.6492 17.4136 37.2724 16.827C37.9128 16.2405 38.648 15.7924 39.478 15.4827C40.3253 15.173 41.2155 15.0189 42.1487 15.0205C43.2028 15.0221 44.1529 15.2225 44.999 15.6213C45.8451 16.0028 46.5528 16.5397 47.1219 17.2319C47.691 17.9068 48.113 18.7196 48.3879 19.6706C48.6801 20.6215 48.7907 21.6672 48.7196 22.8077L39.2064 22.7921C39.2402 23.2415 39.3432 23.6391 39.5154 23.985C39.705 24.3137 39.9291 24.5905 40.188 24.8156C40.4641 25.0407 40.7748 25.214 41.1203 25.3355C41.4658 25.4398 41.8199 25.4922 42.1828 25.4928C42.7876 25.4938 43.3062 25.4082 43.7386 25.2361C44.1881 25.064 44.5342 24.8313 44.7766 24.538L47.9112 25.6836C47.2356 26.6675 46.3875 27.3919 45.3672 27.8569C44.364 28.3218 43.3355 28.5534 42.2813 28.5517C41.2444 28.55 40.2943 28.3929 39.4308 28.0805C38.5672 27.768 37.8249 27.3175 37.2037 26.7289C36.5827 26.1403 36.1 25.4224 35.7558 24.5751C35.4117 23.7278 35.2404 22.777 35.2422 21.7229ZM39.2103 20.4592L45.0686 20.4688C45.0354 19.6392 44.7514 19.0166 44.2164 18.601C43.6813 18.1681 43.025 17.951 42.2474 17.9498C41.5044 17.9486 40.8387 18.1462 40.2504 18.5427C39.6795 18.9392 39.3328 19.5781 39.2103 20.4592ZM53.7196 15.4022L54.4154 17.7622C54.8147 16.726 55.3603 16.0011 56.0522 15.5874C56.7442 15.1738 57.5826 14.9937 58.5675 15.0472L58.5609 18.9872C58.3536 18.9523 58.1721 18.9348 58.0165 18.9345C57.8611 18.917 57.6883 18.9081 57.4982 18.9077C56.5305 18.9062 55.7956 19.1297 55.2937 19.5782C54.7919 20.0093 54.54 20.7434 54.5383 21.7803L54.5273 28.2606L50.5872 28.2542L50.609 15.3971L53.7196 15.4022ZM62.0665 10.9573C62.0676 10.3006 62.2932 9.74796 62.7433 9.29944C63.1933 8.85086 63.7467 8.62711 64.4034 8.62818C65.0601 8.62925 65.6127 8.8548 66.0612 9.30489C66.5098 9.75489 66.7335 10.3083 66.7324 10.9649C66.7313 11.6043 66.5057 12.1569 66.0556 12.6228C65.6056 13.0713 65.0522 13.2951 64.3956 13.2941C63.7389 13.2929 63.1862 13.0674 62.7377 12.6173C62.2892 12.1501 62.0654 11.5967 62.0665 10.9573ZM59.9593 15.4124L66.362 15.4229L66.3402 28.2798L62.3742 28.2734L62.3909 18.4232L59.9543 18.4193L59.9593 15.4124ZM67.6381 18.4318L67.6432 15.4249L69.7688 15.4284L69.7724 13.3288C69.7737 12.5683 69.8698 11.9378 70.0607 11.4369C70.2516 10.9188 70.5461 10.5132 70.944 10.22C71.3593 9.92695 71.8781 9.72046 72.5004 9.60046C73.1228 9.48055 73.8659 9.42129 74.7299 9.42267L76.5186 9.42553L76.5133 12.5361L75.4246 12.5344C75.079 12.5338 74.7938 12.5506 74.5691 12.5849C74.3444 12.6017 74.1629 12.6533 74.0244 12.7395C73.9033 12.8257 73.8167 12.9465 73.7647 13.102C73.7298 13.2574 73.7123 13.4561 73.7118 13.6981L73.7088 15.4348L76.5084 15.4394L76.5033 18.4462L73.7038 18.4417L73.6871 28.2918L69.747 28.2854L69.7637 18.4352L67.6381 18.4318ZM79.761 10.9862C79.7621 10.3295 79.9877 9.77685 80.4377 9.32824C80.8878 8.8797 81.4412 8.65594 82.0979 8.65702C82.7545 8.65809 83.3072 8.88364 83.7557 9.33369C84.2042 9.78369 84.428 10.3371 84.4269 10.9937C84.4258 11.6332 84.2002 12.1858 83.7501 12.6516C83.3 13.1002 82.7466 13.324 82.0899 13.3229C81.4332 13.3218 80.8807 13.0962 80.4322 12.6462C79.9836 12.1789 79.7599 11.6255 79.761 10.9862ZM77.6538 15.4412L84.0563 15.4517L84.0347 28.3087L80.0687 28.3023L80.0853 18.4521L77.6487 18.4481L77.6538 15.4412ZM92.4149 15.1024C92.9678 15.1033 93.5207 15.1647 94.0737 15.2865C94.6432 15.3911 95.1786 15.5735 95.6798 15.8335C96.1977 16.0936 96.6721 16.4399 97.1032 16.8726C97.5518 17.3055 97.9229 17.8418 98.2155 18.4817L94.9211 19.6686C94.7152 19.1153 94.4051 18.726 93.9906 18.5007C93.5937 18.2753 93.1441 18.1623 92.6429 18.1614C92.28 18.1609 91.9257 18.2295 91.5798 18.3671C91.2513 18.4876 90.9572 18.6944 90.6974 18.9878C90.4378 19.2639 90.2298 19.6437 90.0734 20.1273C89.9171 20.5937 89.8383 21.1638 89.8372 21.8378C89.836 22.529 89.9128 23.1167 90.0675 23.6008C90.2395 24.0849 90.4548 24.4741 90.7136 24.7684C90.9723 25.0453 91.2658 25.2531 91.5938 25.3919C91.9392 25.5134 92.2847 25.5745 92.63 25.575C93.1838 25.5759 93.65 25.4729 94.0303 25.2663C94.4115 25.0422 94.7143 24.7403 94.9395 24.3605L98.1518 25.5322C97.8223 26.1192 97.4327 26.6111 96.9832 27.0077C96.5327 27.4045 96.0481 27.7234 95.5294 27.9645C95.0281 28.2056 94.5094 28.3776 93.9731 28.4804C93.4377 28.5833 92.9106 28.6342 92.3918 28.6334C91.3378 28.6316 90.3962 28.4659 89.5673 28.1362C88.7556 27.8066 88.0652 27.3475 87.4959 26.7591C86.944 26.1533 86.5218 25.4355 86.2295 24.6055C85.9544 23.7582 85.8177 22.8249 85.8194 21.8053C85.8212 20.7857 85.9782 19.8701 86.2907 19.0584C86.6204 18.2295 87.0709 17.5217 87.6422 16.935C88.2307 16.3484 88.9227 15.9003 89.7182 15.5905C90.5309 15.2634 91.4298 15.1008 92.4149 15.1024ZM99.1515 24.8598C99.1534 24.0822 99.3611 23.4258 99.7774 22.8908C100.21 22.3385 100.798 21.8902 101.542 21.5458C102.303 21.2014 103.202 20.935 104.24 20.7466C105.294 20.5409 106.443 20.3959 107.687 20.3116L107.688 19.819C107.69 19.0759 107.501 18.5573 107.12 18.2628C106.759 17.9512 106.232 17.7948 105.54 17.7937C104.987 17.7928 104.512 17.9216 104.114 18.1802C103.716 18.4215 103.448 18.8012 103.308 19.3194L99.9924 18.1217C100.426 17.2583 101.144 16.5423 102.148 15.9737C103.151 15.405 104.396 15.1219 105.882 15.1243C106.797 15.1258 107.61 15.2222 108.318 15.4134C109.027 15.6047 109.622 15.9167 110.105 16.3495C110.588 16.7824 110.95 17.3445 111.191 18.0362C111.449 18.7106 111.577 19.5317 111.575 20.4993L111.571 23.3248C111.57 23.7395 111.578 24.1889 111.595 24.6727C111.628 25.1393 111.662 25.5974 111.696 26.0467C111.729 26.4961 111.772 26.9282 111.824 27.343C111.874 27.7406 111.934 28.0777 112.003 28.3542L108.348 28.3483L107.884 26.7923C107.399 27.4654 106.794 27.9483 106.067 28.2409C105.341 28.5162 104.511 28.6531 103.578 28.6516C102.973 28.6506 102.403 28.5633 101.867 28.3896C101.332 28.2159 100.857 27.9645 100.443 27.6355C100.046 27.3065 99.7275 26.9086 99.4857 26.4416C99.2623 25.9746 99.1506 25.4474 99.1515 24.8598ZM105.034 25.9581C105.431 25.9588 105.795 25.9162 106.123 25.8303C106.451 25.7272 106.736 25.5634 106.979 25.3392C107.221 25.1149 107.412 24.8129 107.551 24.4328C107.69 24.0356 107.76 23.5433 107.761 22.9557V22.6446C107.087 22.6954 106.465 22.7634 105.895 22.8489C105.342 22.9345 104.866 23.0547 104.468 23.2096C104.071 23.3471 103.76 23.528 103.534 23.7523C103.327 23.9594 103.222 24.2357 103.222 24.5813C103.221 24.9961 103.393 25.3334 103.738 25.5931C104.084 25.8356 104.516 25.9573 105.034 25.9581ZM113.213 15.4992L115.339 15.5026L115.344 12.2884L119.284 12.2948L119.279 15.5091L122.078 15.5136L122.073 18.5205L119.274 18.5159L119.265 23.7003C119.264 24.3051 119.375 24.7027 119.6 24.8932C119.841 25.0663 120.282 25.1535 120.921 25.1545L122.062 25.1564L122.057 28.3707L119.568 28.3666C118.773 28.3653 118.108 28.321 117.572 28.2338C117.037 28.1292 116.597 27.947 116.252 27.6872C115.924 27.4275 115.682 27.0641 115.527 26.5973C115.39 26.1133 115.322 25.491 115.323 24.7307L115.334 18.5095L113.208 18.506L113.213 15.4992ZM125.427 11.0606C125.429 10.4039 125.654 9.85126 126.104 9.40273C126.554 8.95412 127.108 8.73036 127.764 8.73143C128.42 8.7325 128.973 8.95806 129.422 9.40809C129.871 9.85818 130.094 10.4115 130.093 11.0681C130.092 11.7076 129.867 12.2602 129.416 12.7261C128.966 13.1746 128.413 13.3984 127.756 13.3973C127.1 13.3962 126.547 13.1706 126.098 12.7206C125.65 12.2533 125.426 11.7 125.427 11.0606ZM123.32 15.5156L129.723 15.5261L129.701 28.3831L125.735 28.3767L125.752 18.5265L123.315 18.5225L123.32 15.5156ZM131.486 21.9056C131.488 20.7478 131.671 19.7458 132.035 18.8996C132.416 18.0534 132.92 17.3544 133.543 16.8025C134.182 16.2505 134.909 15.8455 135.722 15.5877C136.552 15.3125 137.416 15.1757 138.315 15.1771C139.196 15.1786 140.042 15.3183 140.854 15.596C141.683 15.8566 142.408 16.2639 143.029 16.8179C143.65 17.3719 144.151 18.0726 144.529 18.92C144.908 19.7674 145.097 20.77 145.095 21.9278C145.092 23.0856 144.901 24.0963 144.519 24.9597C144.138 25.8058 143.636 26.5049 143.012 27.0569C142.389 27.6089 141.663 28.0224 140.832 28.2976C140.02 28.5727 139.172 28.7096 138.292 28.7081C137.393 28.7067 136.529 28.567 135.7 28.2892C134.888 28.0114 134.163 27.5955 133.525 27.0414C132.904 26.4874 132.404 25.7867 132.025 24.9393C131.663 24.0747 131.484 23.0634 131.486 21.9056ZM138.296 25.6494C139.091 25.6507 139.748 25.3667 140.268 24.7973C140.804 24.2278 141.074 23.2692 141.077 21.9212C141.078 21.2473 141.001 20.6769 140.846 20.21C140.708 19.726 140.511 19.3455 140.252 19.0685C140.011 18.7744 139.717 18.5665 139.372 18.445C139.043 18.3062 138.69 18.2365 138.309 18.2359C137.929 18.2353 137.566 18.3038 137.22 18.4415C136.874 18.5619 136.571 18.7687 136.312 19.0621C136.069 19.3383 135.871 19.7181 135.714 20.2017C135.575 20.6681 135.505 21.2382 135.503 21.9122C135.501 23.2601 135.759 24.2196 136.277 24.7907C136.811 25.3619 137.484 25.6481 138.296 25.6494ZM147.008 28.4113L147.03 15.5543L150.477 15.5599L150.967 17.2715C151.106 17.0298 151.296 16.7882 151.538 16.5466C151.798 16.3051 152.092 16.0896 152.42 15.9C152.767 15.6932 153.147 15.5297 153.562 15.4094C153.994 15.2718 154.452 15.2034 154.937 15.2043C155.766 15.2056 156.457 15.3277 157.009 15.5705C157.562 15.7961 158.002 16.1424 158.33 16.6096C158.674 17.0594 158.915 17.6214 159.053 18.2957C159.189 18.9698 159.258 19.7389 159.256 20.603L159.243 28.4312L155.303 28.4249L155.314 21.5815C155.315 21.1323 155.299 20.7089 155.264 20.3113C155.248 19.8965 155.171 19.5422 155.034 19.2482C154.913 18.9369 154.714 18.6947 154.438 18.5214C154.179 18.3482 153.816 18.2611 153.35 18.2604C152.52 18.2591 151.916 18.5605 151.534 19.1647C151.153 19.7516 150.961 20.6327 150.959 21.8078L150.948 28.4177L147.008 28.4113Z" fill="#2E2F2F"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.706 17.4598C13.9231 21.2999 19.466 21.2999 21.6832 17.4598L23.2702 14.7108C23.5145 14.2879 23.6982 13.8532 23.8258 13.4146H33.3875C33.3875 17.842 31.6288 22.0882 28.4981 25.2188C25.3674 28.3495 21.1212 30.1083 16.6938 30.1083C12.2663 30.1083 8.02018 28.3495 4.88949 25.2188C1.7588 22.0882 0 17.842 0 13.4146H9.56335C9.69102 13.8531 9.87471 14.2878 10.119 14.7108L11.706 17.4598Z" fill="#2E2F2F"/>
+        <path d="M5.16503 9.10349C7.67889 9.10349 9.71678 7.06561 9.71678 4.55175C9.71678 2.03789 7.67889 0 5.16503 0C2.65117 0 0.613281 2.03789 0.613281 4.55175C0.613281 7.06561 2.65117 9.10349 5.16503 9.10349Z" fill="#2E2F2F"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M25.4101 0C24.7866 0 24.2812 0.505396 24.2812 1.12883V7.97466C24.2812 8.5981 24.7866 9.10349 25.4101 9.10349H32.2559C32.8793 9.10349 33.3847 8.5981 33.3847 7.97466V1.12883C33.3847 0.505396 32.8793 0 32.2559 0H25.4101ZM28.8329 0.910349C26.8219 0.910349 25.1916 2.54066 25.1916 4.55175C25.1916 6.56284 26.8219 8.19315 28.8329 8.19315C30.844 8.19315 32.4744 6.56284 32.4744 4.55175C32.4744 2.54066 30.844 0.910349 28.8329 0.910349Z" fill="#2E2F2F"/>
+        </svg>
+        
+        <button
+          class="vote__button bg-black-50 float-right  transition text-lg font-ah inline-flex  text-white border-0 py-4 px-8  bg_black focus:outline-none hover:bg-blue-600 rounded md:mt-0"
+        >
+            <a href="{% url 'django_auth_adfs:logout' %}">Logout</a>
+        </button>
+      </div>
+
+        <div class="container flex flex-wrap mt-1 xl:mt-28 2xl:mt-32 space-x-10 sm:space-x-5 md:space-x-16 lg:space-x-12 2xl:space-x-20">
+            <div>
+                <div class="relative" id="canvas_container">
+                    <span class="text-black absolute inset-0 py-0 sm:py-32 font-bold align-middle grid  text-white text-center justify-center justify-items-center text-3xl z-10 place-self-center opacity- ">
+                        <span id="canvas-status" class="m-auto flex">
+                            Please Allow Camera and Location
+                            
+                        </span>
+                    </span>
+                    
+                    <canvas class="rounded-lg m-10 bg-black-50 inside-shadow" style = " transform: scaleX(-1);" id="canvas" width="740" height="540"></canvas>
                 </div>
-            </form>
+            </div>
+            <!-- <div class="flex text-align-center"> -->
+                
+                <div class="details font-ah -mt-36 sm:-mt-8 md:-mt-2 xl:mt-8 ml-0 pt-0 2xl:-pt-5 space-y-2 text-gray-600 justify-center">
+                    <button id="btnCapture_mobile" type="button" class="xl:hidden -mt-4 mb-4 bg-black-50 transition login_button  text-white rounded-full py-4 px-12 focus:outline-none hover:bg-blue-600 hover:text-white space-x-2 rounded text-lg z-60 py-2 px-4 rounded inline-flex items-center">
+                        <svg width="24" height="18" class="" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M22.5 1.47166H10.5C10.5 0.662249 9.825 0 9 0H3C2.175 0 1.5 0.662249 1.5 1.47166C0.675 1.47166 0 2.13391 0 2.94333V16.1883C0 16.9977 0.675 17.66 1.5 17.66H22.5C23.325 17.66 24 16.9977 24 16.1883V2.94333C24 2.13391 23.325 1.47166 22.5 1.47166ZM9 4.41499H3V2.94333H9V4.41499ZM15.75 14.7166C12.84 14.7166 10.5 12.4208 10.5 9.56582C10.5 6.71079 12.84 4.41499 15.75 4.41499C18.66 4.41499 21 6.71079 21 9.56582C21 12.4208 18.66 14.7166 15.75 14.7166ZM19.5 9.56582C19.5 11.5967 17.805 13.245 15.75 13.245C13.695 13.245 12 11.582 12 9.56582C12 7.54964 13.695 5.88666 15.75 5.88666C17.805 5.88666 19.5 7.54964 19.5 9.56582Z" fill="white"/>
+                        </svg>
+                        <span id="btnContent_mobile">Capture</span>
+                      </button>
+                    <p class=" text-4xl text-black-50 font-bold">{{request.user.first_name}}</p>
+                    <p class=" text-2xl">Roll Number : {{rollNumber}} </p>
+                    <p class=" text-xl lg:text-lg" id="status"></p>
+                    <p class="text-xl lg:text-lg">IP address: {{request.session.ip}}</p>
+                    <p class=" text-xl lg:text-lg">Voter Token ID: {{voter_id}}</p>
+                    
+                    <form action="" method="post" class=""> 
+                        {% csrf_token %}
+                        <div class="input-field col s12">
+                            <select name = "hostel_data">
+                            <option value="" disabled selected>Select your hostel</option>
+                            {% for q in hostel %}
+                                <option value="{{q.0}}">{{q.1}}</option>
+                            {% endfor %}
+                            </select>
+                            <!-- <label>Hostel</label> -->
+                        </div>
+                        <div class="pt-3">
+                                {{ form }}
+                            </div>
+                            <div class="sm:flex sm:flex-wrap xl:space-x-5 mt-6 sm:pt-10 md:pt-3 ml-0">
+        
+                                <button id="btnCapture" type="button" class="bg-black-50 transition login_button  text-white    rounded-full py-4 px-12 focus:outline-none hover:bg-blue-600 hover:text-white space-x-2 rounded text-lg z-60 py-2 px-4 rounded hidden xl:inline-flex items-center">
+                                    <svg width="24" height="18" class="" viewBox="0 0 24 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M22.5 1.47166H10.5C10.5 0.662249 9.825 0 9 0H3C2.175 0 1.5 0.662249 1.5 1.47166C0.675 1.47166 0 2.13391 0 2.94333V16.1883C0 16.9977 0.675 17.66 1.5 17.66H22.5C23.325 17.66 24 16.9977 24 16.1883V2.94333C24 2.13391 23.325 1.47166 22.5 1.47166ZM9 4.41499H3V2.94333H9V4.41499ZM15.75 14.7166C12.84 14.7166 10.5 12.4208 10.5 9.56582C10.5 6.71079 12.84 4.41499 15.75 4.41499C18.66 4.41499 21 6.71079 21 9.56582C21 12.4208 18.66 14.7166 15.75 14.7166ZM19.5 9.56582C19.5 11.5967 17.805 13.245 15.75 13.245C13.695 13.245 12 11.582 12 9.56582C12 7.54964 13.695 5.88666 15.75 5.88666C17.805 5.88666 19.5 7.54964 19.5 9.56582Z" fill="white"/>
+                                    </svg>
+                                    <span id="btnContent">Capture</span>
+                                  </button>
+                                <input class="
+                                transition  rounded-full relative text-black bg-white border-2 border-black py-4  px-16 focus:outline-none hover:bg-blue-600 hover:text-white text-lg z-60" id="continueBtn" type="submit" value="Continue" disabled>
+                            </div>
+                        </form>
+                    </div>
+                <div id= "whitespace" class= "w-full h-5" ></div>
+            <!-- </div> -->
         </div>
-        <div class="lg:col-start-2 lg:col-span-3 place-self-center row-start-4 row-span-1 lg:row-span-3">
-            <button id="btnCapture" type="button" class="focus:bg-blue-500 relative bottom-10 lg:bottom-28 left-0 sm:left-5 rounded-full shadow-lg bg-gray-100 w-24 h-24 lg:w-16 lg:h-16 hover:bg-blue-500">
-                <img class="w-14 h-12 lg:h-7 ml-4 lg:ml-1" id="camera" src="{% static 'icons/camera.svg' %}" alt="">
-                <img class="w-14 h-12 lg:h-7 ml-4 lg:ml-1 hidden" id="video_camera" src="{% static 'icons/video.svg' %}" alt="">
-            </button>
-        </div>
-    </div>
+        <div class=" w-full pt-10 ">
+            <div class="flex bg-gray-100 w-full  rounded-lg p-5 h-full items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class = "w-6 h-6 flex-shrink-0 mr-4 =" viewBox="0 0 16 16" width="16" height="16"><path fill-rule="evenodd" d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z"></path></svg>
+              <span>
+              <span>
+                <span class="font-ah  text-base">
+                  <span class=" text-gray-800 ">
+                   If you are facing issues while capturing your image try the following steps:
+                   <li>Move the camera such that the image is in center and you can see the orange bounding box across your face</li>
+                   <li> Make Sure there is proper lighting</li>
+                   <li> If you are wearing specs try again by removing them</li>
+                   <li>Make sure you are in Incognito Mode or try a different browser.</li>
+                </span>
+                </span>
+              </span>
+            </div>
+          </div>
+    <!-- </div> -->
     <script>
         var initialized = false;
         var faceDetected = false;
@@ -125,7 +177,7 @@
 				response.arrayBuffer().then(function(buffer) {
 					var bytes = new Int8Array(buffer);
 					facefinder_classify_region = pico.unpack_cascade(bytes);
-					console.log('* facefinder loaded');
+					// console.log('* facefinder loaded');
 				})
 			})
 			/*
@@ -137,7 +189,7 @@
 				response.arrayBuffer().then(function(buffer) {
 					var bytes = new Int8Array(buffer);
 					do_puploc = lploc.unpack_localizer(bytes);
-					console.log('* puploc loaded');
+					// console.log('* puploc loaded');
 				})
 			})
 			/*
@@ -159,14 +211,23 @@
                 // render the video frame to the canvas element and extract RGBA pixel data
                 
                 var c = document.getElementById('canvas');
-                ctx.drawImage(video, 0, 0);
-				var rgba = ctx.getImageData(0, 0,640,480).data;
+                var v = document.getElementById('video');
+                var nrows = 740;
+                var ncols = 540;
+                var hRatio = (c.width / v.videoWidth) * v.videoHeight; 
+                ctx.drawImage(video, 0, 0,c.width,hRatio);
+				var rgba = ctx.getImageData(0, 0,nrows,ncols).data;
+				// var rgba = ctx.getImageData(0, 0,740,416).data;
 				// prepare input to `run_cascade`
 				image = {
-					"pixels": rgba_to_grayscale(rgba, 480, 640),
-					"nrows": 480,
-					"ncols": 640,
-					"ldim": 640
+					// "pixels": rgba_to_grayscale(rgba, 416, 740),
+					"pixels": rgba_to_grayscale(rgba, ncols, nrows),
+					// "nrows": 416,
+					"nrows": ncols,
+					// "ncols": 740,
+					"ncols": nrows,
+					// "ldim": 740
+					"ldim": nrows
 				}
 				params = {
 					"shiftfactor": 0.1, // move the detection window by 10% of its size
@@ -236,14 +297,32 @@
 			initialized = true;
 		}
 	</script>
-   <script type="text/javascript">  
+   <script type="text/javascript">
+   function changeContent() {
+        let elem = document.getElementById("btnContent");
+        let elem2 = document.getElementById("btnContent_mobile");
+        elem.innerHTML = "Recapture";
+        elem2.innerHTML = "Recapture";
+        $("#btnCapture").toggleClass("bg-orange-500");
+        
+        $("#btnCapture_mobile").toggleClass("bg-orange-500");
+   }
+
       var pic = false;
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
       // Below code to capture image from Video tag (Webcam streaming)  
-      $("#btnCapture").click(async function () {  
-          console.log("clicked");
+      let img_indicator = 0;
+      async function imageCapture() { 
+        if (img_indicator == 0) {
+            document.getElementById('canvas-status').classList.remove("hidden");
+            document.getElementById('canvas-status').innerHTML = '<div class="lds-dual-ring"></div>';
+            img_indicator = 1;
+        } else {
+            img_indicator = 0;
+        }
+        //   console.log("clicked");
           var canvas = document.getElementById('canvas');  
           var context = canvas.getContext('2d');  
     
@@ -252,32 +331,36 @@
           if(pic){
             $('#video').get(0).play();
             // document.getElementById("btnCapture").innerHTML = "Click";
-            $("#camera").toggleClass("hidden");
-            $("#video_camera").toggleClass("hidden");
-            console.log("camera clicked!");
+            // $("#camera").toggleClass("hidden");
+            // $("#video_camera").toggleClass("hidden");
+            // console.log("camera clicked!");
             pic=false;
-          }
-          else{
+        }
+        else{
             faceDetected=false;
             await sleep(200);//if the last face detected is before 200 ms dont allow to click
             if (faceDetected==false){
-              alert('No face in video')
+                alert('No face in video')
             }  
             else{
                 
                 $('#video').get(0).pause();
                 // document.getElementById("btnCapture").innerHTML = "Reclick";
-                $("#camera").toggleClass("hidden");
-                $("#video_camera").toggleClass("hidden");
+                // alert("Your image has been saved.");
+                // $("#camera").toggleClass("hidden");
+                // $("#video_camera").toggleClass("hidden");
                 // document.getElementById("camera").src = "{% static 'icons/camera.svg' %}";
                 pic = true;
+                sendImage();
             }
           }
-          sendImage();
-      }); 
+          
+      }
+      $("#btnCapture").click(imageCapture); 
+      
+      $("#btnCapture_mobile").click(imageCapture); 
      
      var image = false
-     var geol = false
       // Upload image to server - ajax call - with the help of base64 data as a parameter  
      
      function sendImage() {  
@@ -308,7 +391,14 @@
           $.post(url, postdata)
           .done(function(){
             image = true;
-            if (image && geol){
+            M.toast({html: 'Your image has been uploaded. Click continue to start voting.'});
+            changeContent();
+            // document.getElementById("btnContent").innerHTML = "Recapture";
+            let canvaStatus = document.getElementById('canvas-status');
+            canvaStatus.classList.remove("hidden");
+            canvaStatus.innerHTML = "Saved";
+            canvaStatus.classList.add("opacity-40");
+            if (image){
                 document.getElementById("continueBtn").disabled = false;
             }
           });
@@ -320,7 +410,6 @@
 
 <script>
     function post_req(data){
-        geol = false;
         var allCookies = document.cookie;
         var csrf = allCookies.substring(10);
         var postdata = {
@@ -330,8 +419,7 @@
         var url = "{% url 'geo' %}";
         $.post(url, postdata)
         .done(function(){
-            geol = true;
-            if (image && geol){
+            if (image){
                 document.getElementById("continueBtn").disabled = false;
             }
         });
@@ -348,12 +436,12 @@
                         }
         
         post_req(data);              
-        status.textContent = 'GeoLocation : (lat : ' +latitude+', long : ' + longitude + ')';
+        status.textContent = 'GeoLocation : (lat : ' +latitude.toFixed(3)+', long : ' + longitude.toFixed(3) + ')';
         
         }
 
         function error() {
-        status.textContent = 'Unable to retrieve your location';
+            status.textContent = 'Unable to retrieve your location';
             
         }
 
@@ -364,7 +452,14 @@
         navigator.geolocation.getCurrentPosition(success, error);
         }
 
+        // $("#btnCapture").click(function (e) {
+            
+        // });
     }
+
+    // $(document).ready(function () {
+    //     
+    // }
 
     // document.querySelector('#find-me').addEventListener('click', geoFindMe);
     
